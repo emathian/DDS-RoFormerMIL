@@ -5,6 +5,7 @@ import re
 from typing import Any, Dict, List, Tuple
 import einops
 import torch
+import os
 import torch.nn.functional as F
 from pytorch_lightning import LightningModule
 from torch import nn
@@ -47,8 +48,11 @@ class MILLitModule(LightningModule):
         lr_scheduler=None,
         k_sample=8,
         attn_scores=False,
+        fold=0,
     ) -> None:
         super().__init__()
+        
+       
         self.use_instance_loss = use_instance_loss
         if self.use_instance_loss:
             self.bag_loss_weight = bag_loss_weight
@@ -115,6 +119,10 @@ class MILLitModule(LightningModule):
         # get attention scores 
         self.attn_scores = attn_scores
         self.test_process = False
+        
+        # For saving attention maps at the test time
+        self.fold = fold
+        self.results_dir = results_dir
 
     def on_train_start(self) -> None:
         # by default lightning executes validation step sanity checks before training starts,
@@ -329,8 +337,11 @@ class MILLitModule(LightningModule):
         print(coords[0].shape)        
         print("Get slide ID ===============================================================")
         print(slide_id)
-        #lightning_utils.save_attention_matrix(coords[0][0], attention_scores,
-        #                                  loader.dataset.slide_data[["slide_id"]].iloc[0,0], eval_config )
+        print("FOLD " , self.fold)
+        output_attention_scores_dir = os.path.join(self.results_dir, "attention_scores", self.fold)
+        os.makedirs(output_attention_scores_dir, exist_ok=True)
+        lightning_utils.save_attention_matrix(coords[0], attention_scores,
+                                          slide_id[0], output_attention_scores_dir )
         return {"loss": loss, "preds": preds, "targets": targets}
 
     def test_on(self) -> None :

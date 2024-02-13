@@ -44,7 +44,7 @@ def train(
         dataset, split_csv_filename, **args["training_args"]["datamodule_params"]
     )
 
-    model = hydra.utils.instantiate(args["training_args"]["lightning_module"])
+    model = hydra.utils.instantiate(args["training_args"]["lightning_module"], fold=fold)
 
     callbacks = [
         hydra.utils.instantiate(callback_cfg)

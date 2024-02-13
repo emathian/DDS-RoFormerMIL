@@ -86,10 +86,12 @@ def get_binary_classif_results(preds: torch.Tensor, gts: torch.Tensor) -> Dict:
     return results
 
 
-def save_attention_matrix(coords, attention_scores, slide, eval_config):
+def save_attention_matrix(coords, attention_scores, slide, outputdir):
     
-    results_dir = Path(eval_config["results_dir"])
-    output_path = os.path.join(results_dir, "attention_scores", slide+".h5")
+    #results_dir = Path(eval_config["results_dir"])
+    #output_path = os.path.join(results_dir, "attention_scores", slide+".h5")
+    output_path = os.path.join(outputdir, slide+".h5")
+
     coords = coords.cpu().numpy()
     attention_scores = attention_scores.cpu().numpy()
     asset_dict = {   
