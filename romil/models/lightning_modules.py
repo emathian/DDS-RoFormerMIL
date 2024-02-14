@@ -6,6 +6,7 @@ from typing import Any, Dict, List, Tuple
 import einops
 import torch
 import os
+import pandas as pd
 import torch.nn.functional as F
 from pytorch_lightning import LightningModule
 from torch import nn
@@ -344,6 +345,23 @@ class MILLitModule(LightningModule):
         os.makedirs(output_attention_scores_dir, exist_ok=True)
         lightning_utils.save_attention_matrix(coords[0], attention_scores,
                                           slide_id[0], output_attention_scores_dir )
+        print("RES DF \n\n\n")
+        print("slide_id", slide_id[0], type(slide_id[0]))
+        print("preds", preds[0], type(preds[0]))
+        print("targets", targets[0], type(targets[0]))
+        output_pred_dir = os.path.join(self.results_dir, "patients_preds.parquet", str(self.fold))
+        os.makedirs(output_pred_dir, exist_ok=True)
+
+        df_predictions = pd.DataFrame({"slide_id":[slide_id[0]],
+                      "preds":[preds[0].cpu().numpy().tolist()],
+                      "labels":[targets[0].cpu().numpy().tolist()],
+                      "probas":[probas[0].cpu().numpy().tolist()]})
+        df_predictions["fold"]  = self.fold
+        df_predictions["split"]  = "test"
+        print(df_predictions)
+        df_predictions.to_parquet(output_pred_dir, 
+                                   partition_cols=["fold", "split"],
+                                   )
         return {"loss": loss, "preds": preds, "targets": targets}
 
     def test_on(self) -> None :
