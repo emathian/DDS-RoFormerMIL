@@ -70,34 +70,14 @@ def evaluate(model: pl.LightningModule, loader: DataLoader, eval_config: DictCon
     labels = torch.concat([output["targets"] for output in outputs])
     logits = torch.concat([output["logits"] for output in outputs])
     probs = F.softmax(logits, dim=1)
-    ### Emilie cmd lines
-    print("&&&&&&&&&&&&&   CONFIG &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
-    print(eval_config)
-    print("Eval UTils &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Attn scores")
     attention_scores =  [output["attention_scores"] for output in outputs]
     attention_scores = einops.rearrange(torch.squeeze(attention_scores[0]), "c n h -> n c h")
     coords =  [output["coords"] for output in outputs]
-    print(attention_scores.shape)
-    
-    
-    print("PREDS &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Attn scores")
-    print(preds.shape)
-    print("labels &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Attn scores")
-    print(labels.shape)
-    print("logits &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Attn scores")
-    print(logits.shape)
-    print("probs &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Attn scores")
-    print(probs.shape)
-    print("SLIDE &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
-    print(loader.dataset.slide_data[["slide_id"]].iloc[0,0])
-    print("GET COORDS ")
-    print(type(coords[0]))
-    print(coords[0][0].shape) 
+   
     results_dir = Path(eval_config["results_dir"])
     outpath_attn_map = os.path.join(results_dir, "attention_scores")
     lightning_utils.save_attention_matrix(coords[0][0], attention_scores,
                                           loader.dataset.slide_data[["slide_id"]].iloc[0,0], outpath_attn_map )
-    #### 
 
     loader.dataset.slide_data["probs"] = pd.Series(probs.tolist())
     loader.dataset.slide_data["labels"] = pd.Series(labels.tolist())

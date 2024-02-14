@@ -60,7 +60,6 @@ class RoPEAMIL(nn.Module):
             attention_scores (b,n_classes, n_patches)
             updated_features (b,n_patches, hidden_dim)
         """
-        print("************************************** TEST ************************** \n \n ", test_process)
         
         attn_bias, padded_features = fmha.BlockDiagonalMask.from_tensor_list(
             [feature.unsqueeze(0) for feature in features]

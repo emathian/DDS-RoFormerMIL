@@ -160,7 +160,6 @@ class MILLitModule(LightningModule):
         assert not (
             isinstance(self.model, RoMIL.RoPEDSMIL) and len(features) > 1
         ), "DSMIL only implemented for batch size 1"
-        print("FFFFFFFFFFFFFFFFFFFFFFF test in STEP FFFFFFFFFFFFFFFFFFFFFFFFF \n",self.test_process)
         
         outputs = self.forward(features, coords)
         # Bag-level logits (b,n_classes), attention_scores (b, n_classes, n_patches) updated_features (b, n_patches, D)
@@ -325,30 +324,15 @@ class MILLitModule(LightningModule):
         return {"loss": loss, "preds": preds, "targets": targets}
 
     def test_step(self, batch: Any, _: int) -> Dict[str, Any]:
-        print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ B in test STEP ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
         self.test_on()
-        print("TYpe batch &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
-        print(type(batch))
-        print(batch[0])
         loss, instance_loss, preds, targets, probas, attention_scores, coords, slide_id = self.step(batch)
         self.test_log(loss, instance_loss, preds, targets, probas)
-        print("attention_scores -------------------------------------------- TEST" )
-        print(attention_scores.shape)
         attention_scores = einops.rearrange(torch.squeeze(attention_scores), "c n h -> n c h")
-        print("Coords shape  ----------------------------------------------------------------")
-        print(coords[0].shape)        
-        print("Get slide ID ===============================================================")
-        print(slide_id)
-        print("FOLD " , self.fold)
-        print("self.results_dir",self.results_dir)
         output_attention_scores_dir = os.path.join(self.results_dir, "attention_scores", str(self.fold))
         os.makedirs(output_attention_scores_dir, exist_ok=True)
         lightning_utils.save_attention_matrix(coords[0], attention_scores,
                                           slide_id[0], output_attention_scores_dir )
-        print("RES DF \n\n\n")
-        print("slide_id", slide_id[0], type(slide_id[0]))
-        print("preds", preds[0], type(preds[0]))
-        print("targets", targets[0], type(targets[0]))
+      
         output_pred_dir = os.path.join(self.results_dir, "patients_preds.parquet", str(self.fold))
         os.makedirs(output_pred_dir, exist_ok=True)
 
@@ -358,7 +342,6 @@ class MILLitModule(LightningModule):
                       "probas":[probas[0].cpu().numpy().tolist()]})
         df_predictions["fold"]  = self.fold
         df_predictions["split"]  = "test"
-        print(df_predictions)
         df_predictions.to_parquet(output_pred_dir, 
                                    partition_cols=["fold", "split"],
                                    )

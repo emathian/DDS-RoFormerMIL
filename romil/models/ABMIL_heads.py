@@ -117,12 +117,7 @@ class ABMIL_MB(nn.Module):
         class_representations, attention_scores = self.attention_net(
             projected_features, attn_bias, test_process
         )  # b,n_class, hidden_dim
-        print("attention_scores ----------------------------------------------------------- ABMIL Heads")
-        print(attention_scores.shape)
-        print("class_representations ----------------------------------------------------------- ABMIL")
-        print(class_representations.shape)
-        print("test_process bool  ----------------------------------------------------------- ABMIL Heads")
-        print(test_process)
+
 
         logits = torch.hstack(
             [

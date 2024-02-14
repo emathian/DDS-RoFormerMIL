@@ -43,10 +43,7 @@ def train(
     datamodule = MILDatamodule(
         dataset, split_csv_filename, **args["training_args"]["datamodule_params"]
     )
-    print("\n\n\ TRAIN UTILS datamodule  =  ")
 
-    print(type(datamodule), datamodule)
-    print("\n\n\ TRAIN UTILS results_dir  =  ", results_dir)
     model = hydra.utils.instantiate(args["training_args"]["lightning_module"],
                                     fold=fold, results_dir=results_dir)
 
