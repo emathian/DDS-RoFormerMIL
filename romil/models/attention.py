@@ -205,6 +205,12 @@ class ClassAttention(nn.Module):
         Returns:
             torch.Tensor: (b,n_class,d)
         """
+        print("self.attn_scores ------------------------------------------------- Class Attention")
+        print(self.attn_scores)
+        print("self.output_inference_weights ------------------------------------------------- Class Attention")
+
+        print(self.output_inference_weights)
+        
         print("test_process --------------------------------------------------------------- Class Attention ")
         print(test_process)
         # calculate query, key, values for all heads in batch and move head forward to be the batch dim

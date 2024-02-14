@@ -93,9 +93,10 @@ def evaluate(model: pl.LightningModule, loader: DataLoader, eval_config: DictCon
     print("GET COORDS ")
     print(type(coords[0]))
     print(coords[0][0].shape) 
-    
+    results_dir = Path(eval_config["results_dir"])
+    outpath_attn_map = os.path.join(results_dir, "attention_scores")
     lightning_utils.save_attention_matrix(coords[0][0], attention_scores,
-                                          loader.dataset.slide_data[["slide_id"]].iloc[0,0], eval_config )
+                                          loader.dataset.slide_data[["slide_id"]].iloc[0,0], outpath_attn_map )
     #### 
 
     loader.dataset.slide_data["probs"] = pd.Series(probs.tolist())

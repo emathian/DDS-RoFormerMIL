@@ -6,7 +6,7 @@ import hydra
 import mlflow
 import numpy as np
 import pandas as pd
-from omegaconf import DictConfig
+from omegaconf import DictConfig, OmegaConf
 
 from romil import eval_utils
 
@@ -28,7 +28,13 @@ def main(eval_config: DictConfig) -> None:
 
     dataset = hydra.utils.instantiate(eval_config[eval_config["task"]]["MIL_Dataset"])
     datasets_id = {"train": 0, "val": 1, "test": 2, "all": -1}
-
+  
+    print("BBBBBBBBBBBBBBBBBBBBBBB EVAL CONF BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB" )
+    print(eval_config["model_dict"].keys())
+    print("\n\n")
+    OmegaConf.update(eval_config, "model_dict.RoPEAMIL_pixel.mil_head.attention_net.attn_scores", True)
+    print("KKKKKKKKKKKKKKKKKKKKKKK UPDATE EVAL CONFIG KKKKKKKKKKKKKKKKKKKKKKK")
+    print(eval_config["model_dict"])
     folds = np.arange(
         eval_config["k_folds"]["k_start"], eval_config["k_folds"]["k_end"]
     )
