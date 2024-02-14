@@ -68,7 +68,7 @@ def main(training_config: DictConfig):
             training_config, "training_args.trainer.logger.prefix", f"fold_{fold}"
         )
         fold_test_metrics = train_utils.train(
-            dataset, fold, training_config, split_csv_filename
+            dataset, fold, training_config, split_csv_filename, results_dir,
         )
 
         fold_test_metrics["fold"] = fold

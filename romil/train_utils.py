@@ -18,7 +18,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 def train(
-    dataset: Generic_MIL_Dataset, fold: int, args: DictConfig, split_csv_filename: Path
+    dataset: Generic_MIL_Dataset, fold: int, args: DictConfig, split_csv_filename: Path, results_dir: str, 
 ) -> Dict[str, float]:
     """
     train for a single fold
@@ -43,8 +43,9 @@ def train(
     datamodule = MILDatamodule(
         dataset, split_csv_filename, **args["training_args"]["datamodule_params"]
     )
-
-    model = hydra.utils.instantiate(args["training_args"]["lightning_module"], fold=fold)
+    print("\n\n\ TRAIN UTILS results_dir  =  ", results_dir)
+    model = hydra.utils.instantiate(args["training_args"]["lightning_module"],
+                                    fold=fold, results_dir=results_dir)
 
     callbacks = [
         hydra.utils.instantiate(callback_cfg)

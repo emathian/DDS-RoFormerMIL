@@ -49,6 +49,7 @@ class MILLitModule(LightningModule):
         k_sample=8,
         attn_scores=False,
         fold=0,
+        results_dir="tmp_res",
     ) -> None:
         super().__init__()
         
@@ -338,7 +339,8 @@ class MILLitModule(LightningModule):
         print("Get slide ID ===============================================================")
         print(slide_id)
         print("FOLD " , self.fold)
-        output_attention_scores_dir = os.path.join(self.results_dir, "attention_scores", self.fold)
+        print("self.results_dir",self.results_dir)
+        output_attention_scores_dir = os.path.join(self.results_dir, "attention_scores", str(self.fold))
         os.makedirs(output_attention_scores_dir, exist_ok=True)
         lightning_utils.save_attention_matrix(coords[0], attention_scores,
                                           slide_id[0], output_attention_scores_dir )
