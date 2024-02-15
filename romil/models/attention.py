@@ -248,7 +248,12 @@ class ClassAttention(nn.Module):
  
             return self.output_projection(out), attn_weights
         else:
-
+    
+            q = q.to(dtype=torch.float32)
+       
+            k = k.to(dtype=torch.float32)
+        
+            v = v.to(dtype=torch.float32)
             out = fmha.memory_efficient_attention(
                 q, k, v, attn_bias=class_attn_bias
             ).view(len(attn_bias._batch_sizes), self.n_classes, self.attention_dim)

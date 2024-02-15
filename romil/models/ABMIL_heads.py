@@ -114,6 +114,7 @@ class ABMIL_MB(nn.Module):
             _type_: _description_
         """
         projected_features = self.input_projection(features)  # 1, T, embedding_dim
+
         class_representations, attention_scores = self.attention_net(
             projected_features, attn_bias, test_process
         )  # b,n_class, hidden_dim
