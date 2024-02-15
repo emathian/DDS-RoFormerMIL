@@ -5,11 +5,11 @@ hydra:
   run:
     dir: ${results_dir}
   sweep:
-    dir: data/results/${task}/${exp_name}/multirun
+    dir: /home/mathiane/LNENWork/data_RoFormerMIL_TumorSegExp/dataRoFormer/results/${task}/${exp_name}/multirun #data/results/${task}/${exp_name}/multirun
     subdir: ${hydra.job.override_dirname}
 
-features_dir: ${hydra:runtime.cwd}/data/features
-split_dir: ${hydra:runtime.cwd}/data/splits
+features_dir: /home/mathiane/LNENWork/data_RoFormerMIL_TumorSegExp/dataRoFormer/features #${hydra:runtime.cwd}/data/features
+split_dir:  /home/mathiane/LNENWork/data_RoFormerMIL_TumorSegExp/dataRoFormer/splits #${hydra:runtime.cwd}/data/splits
 seed: 1
 
 
@@ -38,6 +38,21 @@ task_2_tumor_subtyping:
     seed: ${seed}
     print_info: True
     label_dict: {"LUAD": 0, "LUSC": 1}
+    patient_strat: False
+    ignore: []
+    h5_folder: 'h5_files_grid'
+
+
+task_3_tumor_carcinoids_segmentation:
+  n_classes: 2
+  MIL_Dataset:
+    _target_: datasets.dataset_generic.Generic_MIL_Dataset
+    csv_path: ${features_dir}/slides_format.csv
+    data_dir: ${features_dir}
+    shuffle: False
+    seed: ${seed}
+    print_info: True
+    label_dict: {"NonTumor": 0, "Tumor": 1}
     patient_strat: False
     ignore: []
     h5_folder: 'h5_files_grid'
