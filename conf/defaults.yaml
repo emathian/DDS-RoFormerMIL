@@ -1,16 +1,29 @@
 defaults:
   - _self_
   
+## Romil + BT exp
 hydra:
   run:
     dir: ${results_dir}
   sweep:
-    dir: /home/mathiane/LNENWork/data_RoFormerMIL_TumorSegExp/dataRoFormer/results/${task}/${exp_name}/multirun #data/results/${task}/${exp_name}/multirun
+    dir: /home/mathiane/LNENWork/data_RoFormerMIL_TumorSegExp/dataRoFormer/results/${task}/${exp_name}/multirun  #data/results/${task}/${exp_name}/multirun ##
     subdir: ${hydra.job.override_dirname}
 
-features_dir: /home/mathiane/LNENWork/data_RoFormerMIL_TumorSegExp/dataRoFormer/features #${hydra:runtime.cwd}/data/features
-split_dir:  /home/mathiane/LNENWork/data_RoFormerMIL_TumorSegExp/dataRoFormer/splits #${hydra:runtime.cwd}/data/splits
+features_dir: /home/mathiane/LNENWork/data_RoFormerMIL_TumorSegExp/dataRoFormer/features  #${hydra:runtime.cwd}/data/features #
+split_dir:  /home/mathiane/LNENWork/data_RoFormerMIL_TumorSegExp/dataRoFormer/splits #${hydra:runtime.cwd}/data/splits # #
 seed: 1
+
+## Original
+# hydra:
+#   run:
+#     dir: ${results_dir}
+#   sweep:
+#     dir: data/results/${task}/${exp_name}/multirun 
+#     subdir: ${hydra.job.override_dirname}
+
+# features_dir: ${hydra:runtime.cwd}/data/features 
+# split_dir:  ${hydra:runtime.cwd}/data/splits 
+# seed: 1
 
 
 # Parameters copied from CLAM code

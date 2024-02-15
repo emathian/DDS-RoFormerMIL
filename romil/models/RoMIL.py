@@ -36,7 +36,9 @@ class RoPEAMIL(nn.Module):
             self.absolute_position_embeddings = SinePositionalEmbedding(hidden_dim)
         else:
             self.absolute_position_embeddings = None
-
+        # to rm
+        self.input_dim =input_dim
+        self.hidden_dim = hidden_dim
     def instance_loss(
         self,
         features: torch.Tensor,
@@ -60,16 +62,28 @@ class RoPEAMIL(nn.Module):
             attention_scores (b,n_classes, n_patches)
             updated_features (b,n_patches, hidden_dim)
         """
-        
+        print("IIIIIIIIIIIIIIIIIIIIIIIIIIIIII \n self.hidden_dim", self.hidden_dim, "self.input_dim", self.input_dim)
         attn_bias, padded_features = fmha.BlockDiagonalMask.from_tensor_list(
             [feature.unsqueeze(0) for feature in features]
         )  # (1, T, attention_dim) with T = sum(Nb)
-
+        padded_features = padded_features.to(torch.float32)
+        print("L1 : padded_features ---------------------------------")
+        print(padded_features.size())
+        print(padded_features.dtype)
+        # print("L1 : attn_bias ---------------------------------")
+        # print(len([coord.unsqueeze(0) for coord in coords]))
+        # print(coords)
         attn_bias, padded_coords = fmha.BlockDiagonalMask.from_tensor_list(
             [coord.unsqueeze(0) for coord in coords]
         )  # (1, T, 2) with T = sum(Nb)
+        print("L1 : padded_coords ---------------------------------")
+        print(padded_coords.shape)#
+        print(padded_coords.dtype)
 
         padded_features = self.dim_reduction_projection(padded_features)
+        print("L2 : padded_features ---------------------------------")
+        print(padded_features.shape)
+        print(padded_features.dtype)
 
         if self.absolute_position_embeddings is not None:
             padded_features = self.absolute_position_embeddings(
@@ -90,6 +104,8 @@ class RoPEAMIL(nn.Module):
             "attention_scores": attention_scores,
             "updated_features": updated_features,
         }
+
+
 
 
 class RoPEDSMIL(nn.Module):
@@ -170,3 +186,5 @@ class RoPEDSMIL(nn.Module):
             "updated_features": encoded_features,
             "patches_predictions": patches_predictions,
         }
+
+

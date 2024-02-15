@@ -14,7 +14,9 @@ from romil import train_utils
 @hydra.main(
     version_base=None,
     config_path="../conf",
-    config_name="training_tcga_test",
+    config_name= "training_carcinoids_seg_fromBT",#"training_tcga_test"#,
+    #config_name= "training_tcga_test",
+
 )
 def main(training_config: DictConfig):
     train_utils.seed_torch(training_config["seed"])
