@@ -200,7 +200,7 @@ class BTRoPEAMIL(nn.Module):
         self.mil_head = mil_head
         self.instance_classifiers = mil_head.instance_classifiers
         self.n_classes = self.mil_head.n_classes
-        #self.dim_reduction_projection = nn.Linear(input_dim, hidden_dim)
+        self.dim_reduction_projection = nn.Linear(input_dim, hidden_dim)
         if absolute_position_embeddings:
             self.absolute_position_embeddings = SinePositionalEmbedding(hidden_dim)
         else:
@@ -240,7 +240,7 @@ class BTRoPEAMIL(nn.Module):
             [coord.unsqueeze(0) for coord in coords]
         )  # (1, T, 2) with T = sum(Nb)
     
-        #padded_features = self.dim_reduction_projection(padded_features)
+        padded_features = self.dim_reduction_projection(padded_features)
  
 
         if self.absolute_position_embeddings is not None:
