@@ -62,8 +62,8 @@ def train(
     )
 
     trainer.fit(model=model, datamodule=datamodule)
-
-    return trainer.test(ckpt_path="best", datamodule=datamodule)[0]
+    #return trainer.test(ckpt_path="best", datamodule=datamodule)[0]
+    return trainer.test(ckpt_path="last", datamodule=datamodule)[0]
 
 
 def seed_torch(seed=7):

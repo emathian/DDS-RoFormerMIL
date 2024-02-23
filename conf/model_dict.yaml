@@ -172,32 +172,31 @@ BTRoPEAMIL_pixel:
 BTRoPEAMIL_s_pixel:
   _target_: romil.models.RoMIL.BTRoPEAMIL
   input_dim: 128
-  hidden_dim: 512 # Not activate first linear layer
+  hidden_dim: 64 # Not activate first linear layer
   absolute_position_embeddings: False
   positional_encoder: 
     _target_: romil.models.position_embedding_modules.RoFormerEncoder
     _recursive_: False
     n_attention_block: 1
     n_embd: ${..hidden_dim}
-    n_head: 8
-    dropout: 0
-    bias: True
+    n_head: 4
+    dropout: 0.1
     rope: True
     rope_freqs: pixel
-    resid_dropout: 0
+    resid_dropout: 0.1
   mil_head: 
     _target_: romil.models.ABMIL_heads.ABMIL_MB
     n_classes: ${${task}.n_classes}
     input_dim: ${..hidden_dim}
     hidden_dim: ${..hidden_dim}
-    dropout: 0
+    dropout: 0.1
     instance_classifiers: False
     attention_net:
       _target_: romil.models.attention.ClassAttention
       attn_scores: False # Warning if true compute inneficient attention to store the weights
       hidden_dim: ${..hidden_dim}
-      attention_dim: 256
+      attention_dim: 32
       dropout: ${..dropout}
       n_classes: ${${task}.n_classes}
-      n_head: 8
+      n_head: 4
       bias: True

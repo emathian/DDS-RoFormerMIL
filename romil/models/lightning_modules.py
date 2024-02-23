@@ -328,6 +328,7 @@ class MILLitModule(LightningModule):
         loss, instance_loss, preds, targets, probas, attention_scores, coords, slide_id = self.step(batch)
         self.test_log(loss, instance_loss, preds, targets, probas)
         attention_scores = einops.rearrange(torch.squeeze(attention_scores), "c n h -> n c h")
+        #attention_scores = einops.rearrange(torch.squeeze(attention_scores), "c n -> n c ")
         output_attention_scores_dir = os.path.join(self.results_dir, "attention_scores", str(self.fold))
         os.makedirs(output_attention_scores_dir, exist_ok=True)
         lightning_utils.save_attention_matrix(coords[0], attention_scores,
@@ -350,6 +351,7 @@ class MILLitModule(LightningModule):
     def test_on(self) -> None :
         self.test_process = True
         self.attn_scores = True
+        
         
     def test_log(
         self,

@@ -244,8 +244,8 @@ class ClassAttention(nn.Module):
                 len(attn_bias._batch_sizes), self.n_classes, self.attention_dim
             )
             # Attention weights for each token are averaged over the attention heads
-            attn_weights = einops.rearrange(attn_weights, "b h c n -> b c n h")
- 
+            #attn_weights = einops.rearrange(attn_weights, "b h c n -> b c n h")
+            #attn_weights = einops.rearrange(attn_weights, "b c n -> b c  h")
             return self.output_projection(out), attn_weights
         else:
     
