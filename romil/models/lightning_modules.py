@@ -121,7 +121,6 @@ class MILLitModule(LightningModule):
         # get attention scores 
         self.attn_scores = attn_scores
         self.test_process = False
-        self.test_process_bis = False
         
         # For saving attention maps at the test time
         self.fold = fold
@@ -157,12 +156,16 @@ class MILLitModule(LightningModule):
         coords (List[torch.Tensor]): List of features coordss (B elements of size Nb*2)
         """
         features, labels, coords, slide_id = batch
-
+        # print("DEBUG slide_id :", slide_id )
+        # print("DEBUG features :", len(features), features[0].shape )
+        # print("DEBUG labels :", len(features), labels[0].shape )
+        # print("DEBUG coords :", len(coords), coords[0].shape )
         assert not (
             isinstance(self.model, RoMIL.RoPEDSMIL) and len(features) > 1
         ), "DSMIL only implemented for batch size 1"
         
         outputs = self.forward(features, coords)
+        
         # Bag-level logits (b,n_classes), attention_scores (b, n_classes, n_patches) updated_features (b, n_patches, D)
         # Updated features are features that went through linear projections before attention
         logits, attention_scores, updated_features = (
@@ -170,7 +173,9 @@ class MILLitModule(LightningModule):
             outputs["attention_scores"],
             outputs["updated_features"],
         )
-
+        # print("DEBUG logits :", logits.shape )
+        # print("DEBUG attention_scores :", attention_scores.shape )
+        # print("DEBUG updated_features :", updated_features.shape )
         probs = F.softmax(logits, dim=-1)
         preds = torch.argmax(probs, dim=-1)
 
@@ -209,9 +214,6 @@ class MILLitModule(LightningModule):
             # To activate the stoarage of attention scores please set attn_scores : True in model_dict.yaml > RoPEAMIL_pixel > mil_head > attention_net  
             # Automatic activation while test step
             return loss, instance_loss, preds, labels, probs, attention_scores, coords, slide_id
-        if self.test_process_bis:
-            print("Return Test exp!")
-            return loss, instance_loss, preds, labels, probs, slide_id
         else:
             return loss, instance_loss, preds, labels, probs
 
@@ -271,12 +273,53 @@ class MILLitModule(LightningModule):
             )
         return {"loss": loss, "preds": preds, "targets": targets}
 
-    def validation_step(self, batch: Any, _: int) -> Dict[str, Any]:
+    def validation_step(self, batch: Any, _: int) -> Dict[str, Any]:     
         loss, instance_loss, preds, targets, probas = self.step(batch)
+        ## Activation of attn scores 
+        # if self.current_epoch == 10:
+        #     # Debug export all validation res at epoch == 10
+        #     self.test_on()
+        #     loss, instance_loss, preds, targets, probas, attention_scores, coords, slide_id = self.step(batch)
+        #     self.val_export_all_res(preds, targets, probas, attention_scores, coords, slide_id)
+        #     self.test_off()   
         self.val_log(loss, instance_loss, preds, targets, probas)
-
+        
         return {"loss": loss, "preds": preds, "targets": targets}
 
+    def val_export_all_res(
+        self,
+        preds: torch.Tensor,
+        targets: torch.Tensor, 
+        probas: torch.Tensor,
+        attention_scores: torch.Tensor, 
+        coords: torch.Tensor,
+        slide_id: list, 
+        )-> None :
+        
+        print("slide_id!" )
+        print(slide_id)
+        print("attention_scores size!")
+        print(attention_scores.size())
+        attention_scores = einops.rearrange(torch.squeeze(attention_scores), "c n h -> n c h")
+        #attention_scores = einops.rearrange(torch.squeeze(attention_scores), "c n -> n c ")
+        output_attention_scores_dir = os.path.join(self.results_dir, "val_attention_scores", str(self.fold))
+        os.makedirs(output_attention_scores_dir, exist_ok=True)
+        lightning_utils.save_attention_matrix(coords[0], attention_scores,
+                                          slide_id[0], output_attention_scores_dir )
+      
+        output_pred_dir = os.path.join(self.results_dir, "val_patients_preds.parquet", str(self.fold))
+        os.makedirs(output_pred_dir, exist_ok=True)
+
+        df_predictions = pd.DataFrame({"slide_id":[slide_id[0]],
+                      "preds":[preds[0].cpu().numpy().tolist()],
+                      "labels":[targets[0].cpu().numpy().tolist()],
+                      "probas":[probas[0].cpu().numpy().tolist()]})
+        df_predictions["fold"]  = self.fold
+        df_predictions["split"]  = "val"
+        df_predictions.to_parquet(output_pred_dir, 
+                                   partition_cols=["fold", "split"],
+                                   )
+    
     def val_log(
         self,
         loss: torch.Tensor,
@@ -329,18 +372,14 @@ class MILLitModule(LightningModule):
 
     def test_step(self, batch: Any, _: int) -> Dict[str, Any]:
         self.test_on()
-        # Silent attn scores extraction 
-        #loss, instance_loss, preds, targets, probas, attention_scores, coords, slide_id = self.step(batch)
-        loss, instance_loss, preds, targets, probas, slide_id = self.step(batch)
+        loss, instance_loss, preds, targets, probas, attention_scores, coords, slide_id = self.step(batch)
         self.test_log(loss, instance_loss, preds, targets, probas)
-        # Silent attn scores extraction 
-        #attention_scores = einops.rearrange(torch.squeeze(attention_scores), "c n h -> n c h") ## If more than one head
+        attention_scores = einops.rearrange(torch.squeeze(attention_scores), "c n h -> n c h")
         #attention_scores = einops.rearrange(torch.squeeze(attention_scores), "c n -> n c ")
-        # Silent attn scores extraction 
-        # output_attention_scores_dir = os.path.join(self.results_dir, "attention_scores", str(self.fold))
-        # os.makedirs(output_attention_scores_dir, exist_ok=True)
-        # lightning_utils.save_attention_matrix(coords[0], attention_scores,
-        #                                   slide_id[0], output_attention_scores_dir )
+        output_attention_scores_dir = os.path.join(self.results_dir, "attention_scores", str(self.fold))
+        os.makedirs(output_attention_scores_dir, exist_ok=True)
+        lightning_utils.save_attention_matrix(coords[0], attention_scores,
+                                          slide_id[0], output_attention_scores_dir )
       
         output_pred_dir = os.path.join(self.results_dir, "patients_preds.parquet", str(self.fold))
         os.makedirs(output_pred_dir, exist_ok=True)
@@ -357,12 +396,13 @@ class MILLitModule(LightningModule):
         return {"loss": loss, "preds": preds, "targets": targets}
 
     def test_on(self) -> None :
-        # Silent attn scores extraction 
+        self.test_process = True
+        self.attn_scores = True
+        
+    def test_off(self) -> None :
         self.test_process = False
-        #self.attn_scores = True
-        # Silent attn scores extraction 
         self.attn_scores = False
-        self.test_process_bis = True
+        
         
     def test_log(
         self,

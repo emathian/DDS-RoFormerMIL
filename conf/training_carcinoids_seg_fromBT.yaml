@@ -26,8 +26,8 @@ training_args:
     optimizer:
       _target_: torch.optim.Adam
       _partial_: True
-      lr: 0.0005
-      weight_decay: 0.00001
+      lr: 0.002
+      weight_decay: 0.00002
     ################
 
     lr_scheduler:
@@ -45,7 +45,7 @@ training_args:
     #################################
     use_instance_loss: False
     
-    k_sample: 8
+    k_sample: 40
     bag_loss_weight: 0.7 # Disregarded if use_instance_loss: False
     subtyping: True
     instance_loss_fn:
@@ -53,7 +53,7 @@ training_args:
 
 
   datamodule_params:
-    batch_size: 8
+    batch_size: 40
     batch_size_test: 1
     num_workers: 4 
     shuffle: True
@@ -79,21 +79,21 @@ training_args:
     early_stopping:
       _target_: pytorch_lightning.callbacks.EarlyStopping
       monitor: "val_BinaryAccuracy"
-      patience: 10
+      patience: 20
       mode: "max"
       check_finite: True
 
   trainer: 
     _target_: pytorch_lightning.Trainer
     default_root_dir: ${results_dir}
-    max_epochs: 30
+    max_epochs: 50
     accelerator: gpu
     strategy: ddp
     precision: '16-mixed'
     # For some reason ddp + sanity_val_steps breaks lightning
     # Change to >0 when working on single gpu
     num_sanity_val_steps: 0
-    overfit_batches: 1
+    #overfit_batches: 1
 
     logger: 
       _target_: romil.lightning_utils.MLFlowLoggerCheckpointer

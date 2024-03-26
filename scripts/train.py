@@ -25,7 +25,9 @@ def main(training_config: DictConfig):
     results_dir.mkdir(parents=True, exist_ok=True)
     (results_dir / "splits").mkdir(exist_ok=True)
     (results_dir / "attention_scores").mkdir(exist_ok=True)
+    (results_dir / "val_attention_scores").mkdir(exist_ok=True)
     (results_dir / "patients_preds.parquet").mkdir(exist_ok=True)
+    (results_dir / "val_patients_preds.parquet").mkdir(exist_ok=True)
 
     dataset = hydra.utils.instantiate(
         training_config[training_config["task"]]["MIL_Dataset"]

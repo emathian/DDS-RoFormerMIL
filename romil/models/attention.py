@@ -231,7 +231,6 @@ class ClassAttention(nn.Module):
 
         attn_weights = torch.zeros([])
         if not q.is_cuda or self.output_inference_weights or test_process:
-            print("\n\n WARNING COMPUTATION OF INNEFICIENT ATTN IN PROGRESS!")
             # For unit test purposes as xformers doesn't handle cpu
             # Or inference purposes to get the attn_weights
             # FOR INFERENCE, it has to be batchsize=1 to avoid padding and stuff

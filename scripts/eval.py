@@ -14,7 +14,7 @@ log = logging.getLogger(__name__)
 
 @hydra.main(
     config_path="../conf",
-    config_name="eval",
+    config_name="eval_tumorseg",
 )
 def main(eval_config: DictConfig) -> None:
     mlflow.set_tracking_uri(eval_config["tracking_uri"])
