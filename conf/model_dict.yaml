@@ -177,26 +177,26 @@ BTRoPEAMIL_s_pixel:
   positional_encoder: 
     _target_: romil.models.position_embedding_modules.RoFormerEncoder
     _recursive_: False
-    n_attention_block: 1
+    n_attention_block: 8
     n_embd: ${..hidden_dim}
-    n_head: 8
-    dropout: 0.2
+    n_head: 16
+    dropout: 0
     rope: True
     rope_freqs: pixel
-    resid_dropout: 0.2
+    resid_dropout: 0
   mil_head: 
     _target_: romil.models.ABMIL_heads.ABMIL_MB
     n_classes: ${${task}.n_classes}
     input_dim: ${..hidden_dim}
     hidden_dim: ${..hidden_dim}
-    dropout: 0.2
+    dropout: 0
     instance_classifiers: False
     attention_net:
       _target_: romil.models.attention.ClassAttention
       attn_scores: True # Warning if true compute inneficient attention to store the weights
       hidden_dim: ${..hidden_dim}
-      attention_dim: 64
+      attention_dim: 96
       dropout: ${..dropout}
       n_classes: ${${task}.n_classes}
-      n_head: 8
+      n_head: 16
       bias: True

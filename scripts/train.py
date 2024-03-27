@@ -14,7 +14,7 @@ from romil import train_utils
 @hydra.main(
     version_base=None,
     config_path="../conf",
-    config_name= "training_carcinoids_seg_fromBT",#"training_tcga_test"#,
+    config_name= "training_carcinoids_CaA1CaA2",#"training_tcga_test"#,
     #config_name= "training_tcga_test",
 
 )
