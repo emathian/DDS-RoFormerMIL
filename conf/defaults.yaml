@@ -82,7 +82,7 @@ task_3_tumor_carcinoids_segmentation:
 task_4_carcinoids_CaA1_CaA2:
   n_classes: 2
   MIL_Dataset:
-    _target_: datasets.dataset_generic.Generic_MIL_Dataset
+    _target_: CLAM.datasets.dataset_generic.Generic_MIL_Dataset
     csv_path: ${features_dir}/slides_format.csv
     data_dir: ${features_dir}
     shuffle: False

@@ -180,16 +180,16 @@ BTRoPEAMIL_s_pixel:
     n_attention_block: 8
     n_embd: ${..hidden_dim}
     n_head: 16
-    dropout: 0
+    dropout: 0.25
     rope: True
     rope_freqs: pixel
-    resid_dropout: 0
+    resid_dropout: 0.25
   mil_head: 
     _target_: romil.models.ABMIL_heads.ABMIL_MB
     n_classes: ${${task}.n_classes}
     input_dim: ${..hidden_dim}
     hidden_dim: ${..hidden_dim}
-    dropout: 0
+    dropout: 0.25
     instance_classifiers: False
     attention_net:
       _target_: romil.models.attention.ClassAttention
