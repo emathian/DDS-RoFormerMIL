@@ -53,12 +53,11 @@ def train(
     ]
     ## TEST WNADB 
     wandb_logger = WandbLogger(project="TEST", log_model="all")
-    
-    print("----------------------- DEBUG --------------------------------------------")
-    print( args["training_args"]["trainer"]["logger"])
+
     trainer = hydra.utils.instantiate(
         args["training_args"]["trainer"], callbacks=callbacks,
-        logger =  wandb_logger
+        logger =  wandb_logger,
+        detect_anomaly=True
     )
     
     wandb_logger.watch(model, log_freq=10)
@@ -70,6 +69,7 @@ def train(
     # )
 
     trainer.fit(model=model, datamodule=datamodule)
+ 
     return trainer.test(ckpt_path="best", datamodule=datamodule)[0]
     ## Warning test on last epoch
     #return trainer.test(ckpt_path="last", datamodule=datamodule)[0]

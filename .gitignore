@@ -1,2 +1,4 @@
 /data
 /outputs
+romil/models/__pycache_/*
+romil/__pycache__/*
