@@ -38,10 +38,10 @@ def main(training_config: DictConfig):
     ckpt_path = training_config.training_args.callbacks.model_checkpoint.dirpath
 
     mlflow.set_tracking_uri(
-        training_config["training_args"]["trainer"]["logger"]["tracking_uri"]
+        uri= training_config["training_args"]["trainer"]["logger"]["tracking_uri"]
     )
     mlflow.set_experiment(
-        training_config["training_args"]["trainer"]["logger"]["experiment_name"]
+       training_config["training_args"]["trainer"]["logger"]["experiment_name"]
     )
     rank = rank_zero._get_rank()
     if rank == 0 or rank is None:

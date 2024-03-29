@@ -6,7 +6,7 @@ hydra:
   run:
     dir: ${results_dir}
   sweep:
-    dir: /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2/dataRoFormer/results/${task}/${exp_name}/multirun  #data/results/${task}/${exp_name}/multirun ##
+    dir: /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2_balanced/dataRoFormer/results/${task}/${exp_name}/multirun  #data/results/${task}/${exp_name}/multirun ##
     #dir: data/results/${task}/${exp_name}/multirun
     subdir: ${hydra.job.override_dirname}
 
@@ -17,8 +17,8 @@ hydra:
 # split_dir:  /home/mathiane/LNENWork/data_RoFormerMIL_TumorSegExp/dataRoFormer/splits 
 
 ## CaA1 vs CaA2
-features_dir: /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2/dataRoFormer/features 
-split_dir:  /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2/dataRoFormer/splits 
+features_dir: /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2_balanced/dataRoFormer/features 
+split_dir:  /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2_balanced/dataRoFormer/splits 
 
 seed: 1
 

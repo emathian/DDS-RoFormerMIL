@@ -8,7 +8,7 @@ exp_name: debug
 model_type: BTRoPEAMIL_s_pixel # Should be one of the models from confs/model_dict.yaml
 label_frac: 100 # % of training data to use during training 
 
-results_dir: /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2/dataRoFormer/results/${task}/${exp_name}/label_frac=${label_frac}/${model_type}/training/${now:%Y-%m-%d}_${now:%H-%M-%S}
+results_dir: /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2_balanced/dataRoFormer/results/${task}/${exp_name}/label_frac=${label_frac}/${model_type}/training/${now:%Y-%m-%d}_${now:%H-%M-%S}
 
 
 training_args:
@@ -26,7 +26,7 @@ training_args:
     optimizer:
       _target_: torch.optim.Adam
       _partial_: True
-      lr: 0.005
+      lr: 0.000001
       weight_decay: 0.0001
     ################
 
@@ -53,7 +53,7 @@ training_args:
 
 
   datamodule_params:
-    batch_size: 2
+    batch_size: 16
     batch_size_test: 1
     num_workers: 4 
     shuffle: True
@@ -79,14 +79,14 @@ training_args:
     early_stopping:
       _target_: pytorch_lightning.callbacks.EarlyStopping
       monitor: "val_BinaryAccuracy"
-      patience: 20
+      patience: 100
       mode: "max"
       check_finite: True
 
   trainer: 
     _target_: pytorch_lightning.Trainer
     default_root_dir: ${results_dir}
-    max_epochs: 50
+    max_epochs: 150
     accelerator: gpu
     strategy: ddp
     precision: '16-mixed'
@@ -99,8 +99,8 @@ training_args:
       _target_: romil.lightning_utils.MLFlowLoggerCheckpointer
       prefix: "" 
       experiment_name: ${exp_name}
-      tracking_uri: /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2/dataRoFormer/data/mlflow
-      run_id:
+      tracking_uri: "http://10.120.1.200:5034" #/home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2_balanced/dataRoFormer/data/mlflow
+      run_id: 
 
 
 k_folds:

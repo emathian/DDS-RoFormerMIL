@@ -158,7 +158,7 @@ class MILLitModule(LightningModule):
         features, labels, coords, slide_id = batch
         # print("DEBUG slide_id :", slide_id )
         # print("DEBUG features :", len(features), features[0].shape )
-        # print("DEBUG labels :", len(features), labels[0].shape )
+        # print("DEBUG labels :", len(labels), labels[0].shape, labels )
         # print("DEBUG coords :", len(coords), coords[0].shape )
         assert not (
             isinstance(self.model, RoMIL.RoPEDSMIL) and len(features) > 1

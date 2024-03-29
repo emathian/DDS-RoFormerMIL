@@ -5,7 +5,7 @@ defaults:
 results_dir: ${split_dir}
 task: task_4_carcinoids_CaA1_CaA2 #task_2_tumor_subtyping
 
-k_folds: 15
+k_folds: 20
 # no more test frac, now depends on the k_folds
 val_frac: 0.05 # as a fraction of the training set, not all the dataset 
 
