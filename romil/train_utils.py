@@ -52,21 +52,23 @@ def train(
         for _, callback_cfg in args["training_args"]["callbacks"].items()
     ]
     ## TEST WNADB 
-    wandb_logger = WandbLogger(project="TEST", log_model="all")
+    #wandb_logger = WandbLogger(project="TEST", log_model="all")
 
     trainer = hydra.utils.instantiate(
         args["training_args"]["trainer"], callbacks=callbacks,
-        logger =  wandb_logger,
-        detect_anomaly=True
+        #logger =  wandb_logger,
+        #detect_anomaly=True
     )
     
-    wandb_logger.watch(model, log_freq=10)
+    #wandb_logger.watch(model, log_freq=10)
     
     if fold == 0:
         trainer.logger.log_hyperparams(args["training_args"])
-    # trainer.logger.experiment.log_artifact(
-    #     trainer.logger.run_id, split_csv_filename, f"fold_{fold}"
-    # )
+        
+    ## MUTE MLFLOW LOGGER   
+    trainer.logger.experiment.log_artifact(
+        trainer.logger.run_id, split_csv_filename, f"fold_{fold}"
+    )
 
     trainer.fit(model=model, datamodule=datamodule)
  
