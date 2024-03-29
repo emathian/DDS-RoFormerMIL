@@ -46,20 +46,28 @@ def train(
 
     model = hydra.utils.instantiate(args["training_args"]["lightning_module"],
                                     fold=fold, results_dir=results_dir)
-
+    
     callbacks = [
         hydra.utils.instantiate(callback_cfg)
         for _, callback_cfg in args["training_args"]["callbacks"].items()
     ]
-
+    ## TEST WNADB 
+    wandb_logger = WandbLogger(project="TEST", log_model="all")
+    
+    print("----------------------- DEBUG --------------------------------------------")
+    print( args["training_args"]["trainer"]["logger"])
     trainer = hydra.utils.instantiate(
-        args["training_args"]["trainer"], callbacks=callbacks
+        args["training_args"]["trainer"], callbacks=callbacks,
+        logger =  wandb_logger
     )
+    
+    wandb_logger.watch(model, log_freq=10)
+    
     if fold == 0:
         trainer.logger.log_hyperparams(args["training_args"])
-    trainer.logger.experiment.log_artifact(
-        trainer.logger.run_id, split_csv_filename, f"fold_{fold}"
-    )
+    # trainer.logger.experiment.log_artifact(
+    #     trainer.logger.run_id, split_csv_filename, f"fold_{fold}"
+    # )
 
     trainer.fit(model=model, datamodule=datamodule)
     return trainer.test(ckpt_path="best", datamodule=datamodule)[0]

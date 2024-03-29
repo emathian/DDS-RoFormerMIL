@@ -479,9 +479,10 @@ class MILLitModule(LightningModule):
                         "Fold %s | Epoch %s|"
                         f" {' | '.join([f'{key}: {value.item()}' for key, value in self.trainer.callback_metrics.items()])} "
                     ),
-                    re.findall(r"\d+", self.logger._prefix)[
-                        -1
-                    ],  # Find current validation fold using the logger prefix (extract the last number in the string)
+                    ## MUTE MLFLOW LOGGER
+                    # re.findall(r"\d+", self.logger._prefix)[
+                    #     -1
+                    # ],  # Find current validation fold using the logger prefix (extract the last number in the string)
                     self.current_epoch,
                 )
 

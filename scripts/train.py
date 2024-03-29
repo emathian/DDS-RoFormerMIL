@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 from lightning_fabric.utilities import rank_zero
 from omegaconf import DictConfig, OmegaConf
-
+from pytorch_lightning.loggers import WandbLogger
 from romil import train_utils
 
 
