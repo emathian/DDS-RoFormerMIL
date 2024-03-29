@@ -8,7 +8,7 @@ exp_name: debug
 model_type: BTRoPEAMIL_s_pixel # Should be one of the models from confs/model_dict.yaml
 label_frac: 100 # % of training data to use during training 
 
-results_dir: /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2_balanced/dataRoFormer/results/${task}/${exp_name}/label_frac=${label_frac}/${model_type}/training/${now:%Y-%m-%d}_${now:%H-%M-%S}
+results_dir: /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2_balanced_norm/dataRoFormer/results/${task}/${exp_name}/label_frac=${label_frac}/${model_type}/training/${now:%Y-%m-%d}_${now:%H-%M-%S}
 
 
 training_args:
@@ -26,8 +26,8 @@ training_args:
     optimizer:
       _target_: torch.optim.Adam
       _partial_: True
-      lr: 0.000001
-      weight_decay: 0.0001
+      lr: 0.0005
+      weight_decay: 0.0005
     ################
 
     lr_scheduler:
@@ -45,7 +45,7 @@ training_args:
     #################################
     use_instance_loss: False
     
-    k_sample: 40
+    k_sample: 80
     bag_loss_weight: 0.7 # Disregarded if use_instance_loss: False
     subtyping: True
     instance_loss_fn:
@@ -53,7 +53,7 @@ training_args:
 
 
   datamodule_params:
-    batch_size: 16
+    batch_size: 8
     batch_size_test: 1
     num_workers: 4 
     shuffle: True
@@ -99,7 +99,7 @@ training_args:
       _target_: romil.lightning_utils.MLFlowLoggerCheckpointer
       prefix: "" 
       experiment_name: ${exp_name}
-      tracking_uri: "http://10.120.1.200:5034" #/home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2_balanced/dataRoFormer/data/mlflow
+      tracking_uri: "http://10.120.1.200:5034" #/home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2_balanced_norm/dataRoFormer/data/mlflow
       run_id: 
 
 

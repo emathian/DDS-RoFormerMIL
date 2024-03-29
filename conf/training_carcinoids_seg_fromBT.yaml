@@ -26,8 +26,8 @@ training_args:
     optimizer:
       _target_: torch.optim.Adam
       _partial_: True
-      lr: 0.002
-      weight_decay: 0.00002
+      lr: 0.0005
+      weight_decay: 0.0005
     ################
 
     lr_scheduler:
@@ -53,7 +53,7 @@ training_args:
 
 
   datamodule_params:
-    batch_size: 40
+    batch_size: 8
     batch_size_test: 1
     num_workers: 4 
     shuffle: True

@@ -11,12 +11,33 @@ from omegaconf import DictConfig, OmegaConf
 from CLAM.datasets.dataset_generic import Generic_MIL_Dataset
 from romil.lightning_datamodule import MILDatamodule
 from pytorch_lightning.loggers import WandbLogger
+from torch import nn
 log = logging.getLogger(__name__)
 
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-
+# def xavier_init(model):
+#     # From : https://lightning.ai/docs/pytorch/stable/notebooks/course_UvA-DL/03-initialization-and-optimization.html
+#     for name, param in model.named_parameters():
+#         if name.endswith(".bias"):
+#             param.data.fill_(0)
+#         else:
+#             bound = math.sqrt(6) / math.sqrt(param.shape[0] + param.shape[1])
+#             param.data.uniform_(-bound, bound)
+            
+            
+def xavier_init(model):
+    for name, param in model.named_parameters():
+        if "weight" in name:  # Initialize weights only, not biases
+            if len(param.shape) >= 2:
+                nn.init.xavier_uniform_(param)
+            else:
+                nn.init.constant_(param, 0.1)
+        elif "bias" in name:
+            nn.init.constant_(param, 0.0)
+            
+            
 def train(
     dataset: Generic_MIL_Dataset, fold: int, args: DictConfig, split_csv_filename: Path, results_dir: str, 
 ) -> Dict[str, float]:
@@ -46,7 +67,7 @@ def train(
 
     model = hydra.utils.instantiate(args["training_args"]["lightning_module"],
                                     fold=fold, results_dir=results_dir)
-    
+    xavier_init(model)
     callbacks = [
         hydra.utils.instantiate(callback_cfg)
         for _, callback_cfg in args["training_args"]["callbacks"].items()
@@ -56,6 +77,8 @@ def train(
 
     trainer = hydra.utils.instantiate(
         args["training_args"]["trainer"], callbacks=callbacks,
+        gradient_clip_val=1,
+        gradient_clip_algorithm="value"
         #logger =  wandb_logger,
         #detect_anomaly=True
     )

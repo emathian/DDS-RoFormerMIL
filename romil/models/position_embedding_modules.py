@@ -3,7 +3,7 @@ from typing import Any
 import torch
 from torch import nn
 from xformers.ops import fmha
-
+import numpy as np
 from romil.models.attention import Block
 
 
@@ -67,7 +67,9 @@ class RoFormerEncoder(nn.Module):
         coords: torch.Tensor,
         attn_bias: fmha.BlockDiagonalMask,
     ) -> torch.Tensor:
+        count_block = 0
         for block in self.attention_blocks:
+            count_block += 1
             features = block(
                 features=features,
                 coords=coords,
