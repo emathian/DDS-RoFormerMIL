@@ -14,7 +14,7 @@ from romil import train_utils
 @hydra.main(
     version_base=None,
     config_path="../conf",
-    config_name= "training_carcinoids_CaA1CaA2",#"training_tcga_test"#,
+    config_name= "task_4_carcinoids_CaA1_CaA2",#"training_tcga_test"#,
     #config_name= "training_tcga_test",
 
 )
@@ -37,6 +37,11 @@ def main(training_config: DictConfig):
     )
     ckpt_path = training_config.training_args.callbacks.model_checkpoint.dirpath
 
+    # print("---------------- tracking_uri -------------------------------------")
+    # print(training_config["training_args"]["trainer"]["logger"]["tracking_uri"])
+    # print("---------------- tracking exp name -------------------------------------")
+    # print(training_config["training_args"]["trainer"]["logger"]["experiment_name"])
+    # ## MUTE MLFLOW LOGGER
     mlflow.set_tracking_uri(
         uri= training_config["training_args"]["trainer"]["logger"]["tracking_uri"]
     )
@@ -44,6 +49,7 @@ def main(training_config: DictConfig):
        training_config["training_args"]["trainer"]["logger"]["experiment_name"]
     )
     rank = rank_zero._get_rank()
+    ## MUTE MLFLOW LOGGER
     if rank == 0 or rank is None:
         mlflow_run = mlflow.start_run()
         OmegaConf.update(
@@ -69,6 +75,7 @@ def main(training_config: DictConfig):
             "training_args.callbacks.model_checkpoint.dirpath",
             f"{ckpt_path}/fold_{fold}",
         )
+        # MUTE MLFLOW
         OmegaConf.update(
             training_config, "training_args.trainer.logger.prefix", f"fold_{fold}"
         )
@@ -80,6 +87,7 @@ def main(training_config: DictConfig):
         pd.DataFrame([fold_test_metrics]).to_parquet(
             results_dir / "test_metrics.parquet", partition_cols=["fold"]
         )
+    ## TO COMMENT WANDB
     mlflow.end_run()
 
 

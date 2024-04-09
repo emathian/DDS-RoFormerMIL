@@ -168,40 +168,40 @@ BTRoPEAMIL_pixel:
 
 
 # #####################
-# # Config for BT projector d=128 | simplified no hidden layer
-BTRoPEAMIL_s_pixel:
-  _target_: romil.models.RoMIL.BTRoPEAMIL
-  input_dim: 128
-  hidden_dim: 128 # Not activate first linear layer
-  absolute_position_embeddings: False
-  positional_encoder: 
-    _target_: romil.models.position_embedding_modules.RoFormerEncoder
-    _recursive_: False
-    n_attention_block: 4
-    n_embd: ${..hidden_dim}
-    n_head: 16
-    dropout: 0.2
-    rope: True
-    rope_freqs: pixel
-    resid_dropout: 0.2
-  mil_head: 
-    _target_: romil.models.ABMIL_heads.ABMIL_MB
-    n_classes: ${${task}.n_classes}
-    input_dim: ${..hidden_dim}
-    hidden_dim: ${..hidden_dim}
-    dropout: 0.2
-    instance_classifiers: False
-    attention_net:
-      _target_: romil.models.attention.ClassAttention
-      attn_scores: True # Warning if true compute inneficient attention to store the weights
-      hidden_dim: ${..hidden_dim}
-      attention_dim: 64
-      dropout: ${..dropout}
-      n_classes: ${${task}.n_classes}
-      n_head: 8
-      bias: True
+# # CaA1 CaA2 Overfitting
+# BTRoPEAMIL_s_pixel:
+#   _target_: romil.models.RoMIL.BTRoPEAMIL
+#   input_dim: 128
+#   hidden_dim: 128 # Not activate first linear layer
+#   absolute_position_embeddings: False
+#   positional_encoder: 
+#     _target_: romil.models.position_embedding_modules.RoFormerEncoder
+#     _recursive_: False
+#     n_attention_block: 4
+#     n_embd: ${..hidden_dim}
+#     n_head: 16
+#     dropout: 0.2
+#     rope: True
+#     rope_freqs: pixel
+#     resid_dropout: 0.2
+#   mil_head: 
+#     _target_: romil.models.ABMIL_heads.ABMIL_MB
+#     n_classes: ${${task}.n_classes}
+#     input_dim: ${..hidden_dim}
+#     hidden_dim: ${..hidden_dim}
+#     dropout: 0.2
+#     instance_classifiers: False
+#     attention_net:
+#       _target_: romil.models.attention.ClassAttention
+#       attn_scores: True # Warning if true compute inneficient attention to store the weights
+#       hidden_dim: ${..hidden_dim}
+#       attention_dim: 64
+#       dropout: ${..dropout}
+#       n_classes: ${${task}.n_classes}
+#       n_head: 8
+#       bias: True
 
-
+## CaA1 CaA2 Slight overfitting useful-auk-789 
 # BTRoPEAMIL_s_pixel:
 #   _target_: romil.models.RoMIL.BTRoPEAMIL
 #   input_dim: 128
@@ -210,7 +210,7 @@ BTRoPEAMIL_s_pixel:
 #   positional_encoder: 
 #     _target_: romil.models.position_embedding_modules.RoFormerEncoder
 #     _recursive_: False
-#     n_attention_block: 1
+#     n_attention_block: 4
 #     n_embd: ${..hidden_dim}
 #     n_head: 8
 #     dropout: 0.2
@@ -232,4 +232,270 @@ BTRoPEAMIL_s_pixel:
 #       dropout: ${..dropout}
 #       n_classes: ${${task}.n_classes}
 #       n_head: 8
+#       bias: True
+
+## More slight overfit gaudy-crow-950 
+# BTRoPEAMIL_s_pixel:
+#   _target_: romil.models.RoMIL.BTRoPEAMIL
+#   input_dim: 128
+#   hidden_dim: 64 # Not activate first linear layer
+#   absolute_position_embeddings: False
+#   positional_encoder: 
+#     _target_: romil.models.position_embedding_modules.RoFormerEncoder
+#     _recursive_: False
+#     n_attention_block: 2
+#     n_embd: ${..hidden_dim}
+#     n_head: 8
+#     dropout: 0.3
+#     rope: True
+#     rope_freqs: pixel
+#     resid_dropout: 0.2
+#   mil_head: 
+#     _target_: romil.models.ABMIL_heads.ABMIL_MB
+#     n_classes: ${${task}.n_classes}
+#     input_dim: ${..hidden_dim}
+#     hidden_dim: ${..hidden_dim}
+#     dropout: 0.3
+#     instance_classifiers: False
+#     attention_net:
+#       _target_: romil.models.attention.ClassAttention
+#       attn_scores: True # Warning if true compute inneficient attention to store the weights
+#       hidden_dim: ${..hidden_dim}
+#       attention_dim: 32
+#       dropout: ${..dropout}
+#       n_classes: ${${task}.n_classes}
+#       n_head: 8
+#       bias: True#
+
+## enthused-mule-248 
+# BTRoPEAMIL_s_pixel:
+#   _target_: romil.models.RoMIL.BTRoPEAMIL
+#   input_dim: 128
+#   hidden_dim: 64 # Not activate first linear layer
+#   absolute_position_embeddings: False
+#   positional_encoder: 
+#     _target_: romil.models.position_embedding_modules.RoFormerEncoder
+#     _recursive_: False
+#     n_attention_block: 2
+#     n_embd: ${..hidden_dim}
+#     n_head: 8
+#     dropout: 0.3
+#     rope: True
+#     rope_freqs: pixel
+#     resid_dropout: 0.2
+#   mil_head: 
+#     _target_: romil.models.ABMIL_heads.ABMIL_MB
+#     n_classes: ${${task}.n_classes}
+#     input_dim: ${..hidden_dim}
+#     hidden_dim: ${..hidden_dim}
+#     dropout: 0.3
+#     instance_classifiers: False
+#     attention_net:
+#       _target_: romil.models.attention.ClassAttention
+#       attn_scores: True # Warning if true compute inneficient attention to store the weights
+#       hidden_dim: ${..hidden_dim}
+#       attention_dim: 32
+#       dropout: ${..dropout}
+#       n_classes: ${${task}.n_classes}
+#       n_head: 4
+#       bias: True
+
+
+# BTRoPEAMIL_s_pixel: #omniscient-fish-220 
+#   _target_: romil.models.RoMIL.BTRoPEAMIL
+#   input_dim: 128
+#   hidden_dim: 64 # Not activate first linear layer
+#   absolute_position_embeddings: False
+#   positional_encoder: 
+#     _target_: romil.models.position_embedding_modules.RoFormerEncoder
+#     _recursive_: False
+#     n_attention_block: 2
+#     n_embd: ${..hidden_dim}
+#     n_head: 4
+#     dropout: 0.3
+#     rope: True
+#     rope_freqs: pixel
+#     resid_dropout: 0.3
+#   mil_head: 
+#     _target_: romil.models.ABMIL_heads.ABMIL_MB
+#     n_classes: ${${task}.n_classes}
+#     input_dim: ${..hidden_dim}
+#     hidden_dim: ${..hidden_dim}
+#     dropout: 0.3
+#     instance_classifiers: False
+#     attention_net:
+#       _target_: romil.models.attention.ClassAttention
+#       attn_scores: True # Warning if true compute inneficient attention to store the weights
+#       hidden_dim: ${..hidden_dim}
+#       attention_dim: 32
+#       dropout: ${..dropout}
+#       n_classes: ${${task}.n_classes}
+#       n_head: 4
+#       bias: True
+
+
+
+# BTRoPEAMIL_s_pixel: #wise-zebra-84 
+#   _target_: romil.models.RoMIL.BTRoPEAMIL
+#   input_dim: 128
+#   hidden_dim: 64 # Not activate first linear layer
+#   absolute_position_embeddings: False
+#   positional_encoder: 
+#     _target_: romil.models.position_embedding_modules.RoFormerEncoder
+#     _recursive_: False
+#     n_attention_block: 8
+#     n_embd: ${..hidden_dim}
+#     n_head: 8
+#     dropout: 0.4
+#     rope: True
+#     rope_freqs: pixel
+#     resid_dropout: 0.4
+#   mil_head: 
+#     _target_: romil.models.ABMIL_heads.ABMIL_MB
+#     n_classes: ${${task}.n_classes}
+#     input_dim: ${..hidden_dim}
+#     hidden_dim: ${..hidden_dim}
+#     dropout: 0.4
+#     instance_classifiers: False
+#     attention_net:
+#       _target_: romil.models.attention.ClassAttention
+#       attn_scores: True # Warning if true compute inneficient attention to store the weights
+#       hidden_dim: ${..hidden_dim}
+#       attention_dim: 48
+#       dropout: ${..dropout}
+#       n_classes: ${${task}.n_classes}
+#       n_head: 8
+#       bias: True
+
+
+
+# BTRoPEAMIL_s_pixel: #calm-moose-545 
+#   _target_: romil.models.RoMIL.BTRoPEAMIL
+#   input_dim: 128
+#   hidden_dim: 64 # Not activate first linear layer
+#   absolute_position_embeddings: False
+#   positional_encoder: 
+#     _target_: romil.models.position_embedding_modules.RoFormerEncoder
+#     _recursive_: False
+#     n_attention_block: 2
+#     n_embd: ${..hidden_dim}
+#     n_head: 4
+#     dropout: 0.4
+#     rope: True
+#     rope_freqs: pixel
+#     resid_dropout: 0.4
+#   mil_head: 
+#     _target_: romil.models.ABMIL_heads.ABMIL_MB
+#     n_classes: ${${task}.n_classes}
+#     input_dim: ${..hidden_dim}
+#     hidden_dim: ${..hidden_dim}
+#     dropout: 0.4
+#     instance_classifiers: False
+#     attention_net:
+#       _target_: romil.models.attention.ClassAttention
+#       attn_scores: True # Warning if true compute inneficient attention to store the weights
+#       hidden_dim: ${..hidden_dim}
+#       attention_dim: 48
+#       dropout: ${..dropout}
+#       n_classes: ${${task}.n_classes}
+#       n_head: 4
+#       bias: True
+
+
+
+# BTRoPEAMIL_s_pixel: #Selective shark | omniscient-fish-220  like bigger batch size = 32 
+#   _target_: romil.models.RoMIL.BTRoPEAMIL
+#   input_dim: 128
+#   hidden_dim: 64 # Not activate first linear layer
+#   absolute_position_embeddings: False
+#   positional_encoder: 
+#     _target_: romil.models.position_embedding_modules.RoFormerEncoder
+#     _recursive_: False
+#     n_attention_block: 2
+#     n_embd: ${..hidden_dim}
+#     n_head: 4
+#     dropout: 0.3
+#     rope: True
+#     rope_freqs: pixel
+#     resid_dropout: 0.35
+#   mil_head: 
+#     _target_: romil.models.ABMIL_heads.ABMIL_MB
+#     n_classes: ${${task}.n_classes}
+#     input_dim: ${..hidden_dim}
+#     hidden_dim: ${..hidden_dim}
+#     dropout: 0.3
+#     instance_classifiers: False
+#     attention_net:
+#       _target_: romil.models.attention.ClassAttention
+#       attn_scores: True # Warning if true compute inneficient attention to store the weights
+#       hidden_dim: ${..hidden_dim}
+#       attention_dim: 32
+#       dropout: ${..dropout}
+#       n_classes: ${${task}.n_classes}
+#       n_head: 4
+#       bias: True
+
+
+BTRoPEAMIL_s_pixel: # redolent-goat-469  => Best model 
+  _target_: romil.models.RoMIL.BTRoPEAMIL
+  input_dim: 128
+  hidden_dim: 64 # Not activate first linear layer
+  absolute_position_embeddings: False
+  positional_encoder: 
+    _target_: romil.models.position_embedding_modules.RoFormerEncoder
+    _recursive_: False
+    n_attention_block: 6
+    n_embd: ${..hidden_dim}
+    n_head: 8
+    dropout: 0.3
+    rope: True
+    rope_freqs: pixel
+    resid_dropout: 0.3
+  mil_head: 
+    _target_: romil.models.ABMIL_heads.ABMIL_MB
+    n_classes: ${${task}.n_classes}
+    input_dim: ${..hidden_dim}
+    hidden_dim: ${..hidden_dim}
+    dropout: 0.3
+    instance_classifiers: False
+    attention_net:
+      _target_: romil.models.attention.ClassAttention
+      attn_scores: True # Warning if true compute inneficient attention to store the weights
+      hidden_dim: ${..hidden_dim}
+      attention_dim: 32
+      dropout: ${..dropout}
+      n_classes: ${${task}.n_classes}
+      n_head: 8
+      bias: True
+
+# BTRoPEAMIL_s_pixel: ## Industrious foal
+#   _target_: romil.models.RoMIL.BTRoPEAMIL
+#   input_dim: 128
+#   hidden_dim: 64 # Not activate first linear layer
+#   absolute_position_embeddings: False
+#   positional_encoder: 
+#     _target_: romil.models.position_embedding_modules.RoFormerEncoder
+#     _recursive_: False
+#     n_attention_block: 2
+#     n_embd: ${..hidden_dim}
+#     n_head: 4
+#     dropout: 0.3
+#     rope: True
+#     rope_freqs: pixel
+#     resid_dropout: 0.3
+#   mil_head: 
+#     _target_: romil.models.ABMIL_heads.ABMIL_MB
+#     n_classes: ${${task}.n_classes}
+#     input_dim: ${..hidden_dim}
+#     hidden_dim: ${..hidden_dim}
+#     dropout: 0.3
+#     instance_classifiers: False
+#     attention_net:
+#       _target_: romil.models.attention.ClassAttention
+#       attn_scores: True # Warning if true compute inneficient attention to store the weights
+#       hidden_dim: ${..hidden_dim}
+#       attention_dim: 32
+#       dropout: ${..dropout}
+#       n_classes: ${${task}.n_classes}
+#       n_head: 4
 #       bias: True

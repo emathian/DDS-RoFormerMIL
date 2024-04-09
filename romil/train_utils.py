@@ -16,16 +16,7 @@ log = logging.getLogger(__name__)
 
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-# def xavier_init(model):
-#     # From : https://lightning.ai/docs/pytorch/stable/notebooks/course_UvA-DL/03-initialization-and-optimization.html
-#     for name, param in model.named_parameters():
-#         if name.endswith(".bias"):
-#             param.data.fill_(0)
-#         else:
-#             bound = math.sqrt(6) / math.sqrt(param.shape[0] + param.shape[1])
-#             param.data.uniform_(-bound, bound)
-            
+           
             
 def xavier_init(model):
     for name, param in model.named_parameters():
@@ -73,22 +64,24 @@ def train(
         for _, callback_cfg in args["training_args"]["callbacks"].items()
     ]
     ## TEST WNADB 
-    #wandb_logger = WandbLogger(project="TEST", log_model="all")
+    #wandb_logger = WandbLogger(project="CaA1CaA2_v3", log_model="all")
 
     trainer = hydra.utils.instantiate(
         args["training_args"]["trainer"], callbacks=callbacks,
         gradient_clip_val=1,
-        gradient_clip_algorithm="value"
+        gradient_clip_algorithm="value",
         #logger =  wandb_logger,
         #detect_anomaly=True
-    )
+        )
     
-    #wandb_logger.watch(model, log_freq=10)
+    # wandb_logger.watch(model, log_freq=100)
+    # art = wandb.Artifact('model-test-debug', type='model')
+    # wandb.log_artifact(art)
     
     if fold == 0:
         trainer.logger.log_hyperparams(args["training_args"])
         
-    ## MUTE MLFLOW LOGGER   
+    # MUTE MLFLOW LOGGER   
     trainer.logger.experiment.log_artifact(
         trainer.logger.run_id, split_csv_filename, f"fold_{fold}"
     )

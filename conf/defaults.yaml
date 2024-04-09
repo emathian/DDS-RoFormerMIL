@@ -6,19 +6,19 @@ hydra:
   run:
     dir: ${results_dir}
   sweep:
-    dir: /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2_balanced_norm/dataRoFormer/results/${task}/${exp_name}/multirun  #data/results/${task}/${exp_name}/multirun ##
+    dir: /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2_normdata_RoFormerMIL_CaA1CaA2_norm/dataRoFormer/results/${task}/${exp_name}/multirun  #data/results/${task}/${exp_name}/multirun ##
     #dir: data/results/${task}/${exp_name}/multirun
     subdir: ${hydra.job.override_dirname}
 
 #features_dir: ${hydra:runtime.cwd}/data/features 
 #split_dir: ${hydra:runtime.cwd}/data/splits
 ## Tumor segementation experiment
-# features_dir: /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2_balanced_norm/dataRoFormer/features
-# split_dir:  /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2_balanced_norm/dataRoFormer/splits 
+# features_dir: /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2_norm/dataRoFormer/features
+# split_dir:  /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2_norm/dataRoFormer/splits 
 
 ## CaA1 vs CaA2
-features_dir: /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2_balanced_norm/dataRoFormer/features 
-split_dir:  /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2_balanced_norm/dataRoFormer/splits 
+features_dir: /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2_norm/dataRoFormer/features 
+split_dir:  /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2_norm/dataRoFormer/splits 
 
 seed: 1
 
@@ -89,6 +89,20 @@ task_4_carcinoids_CaA1_CaA2:
     seed: ${seed}
     print_info: True
     label_dict: {"CaA1": 0, "CaA2": 1}
+    patient_strat: False
+    ignore: []
+    h5_folder: 'h5_files_grid'
+
+task_5_carcinoids_TCAC:
+  n_classes: 2
+  MIL_Dataset:
+    _target_: CLAM.datasets.dataset_generic.Generic_MIL_Dataset
+    csv_path: ${features_dir}/slides_format.csv
+    data_dir: ${features_dir}
+    shuffle: False
+    seed: ${seed}
+    print_info: True
+    label_dict: {"TC": 0, "AC": 1}
     patient_strat: False
     ignore: []
     h5_folder: 'h5_files_grid'

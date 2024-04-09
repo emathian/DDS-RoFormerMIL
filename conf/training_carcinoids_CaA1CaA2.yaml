@@ -4,11 +4,11 @@ defaults:
   - _self_ 
 
 task: task_4_carcinoids_CaA1_CaA2
-exp_name: debug
+exp_name: CaA1Ca2_unbalanced_norm  #debug
 model_type: BTRoPEAMIL_s_pixel # Should be one of the models from confs/model_dict.yaml
 label_frac: 100 # % of training data to use during training 
 
-results_dir: /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2_balanced_norm/dataRoFormer/results/${task}/${exp_name}/label_frac=${label_frac}/${model_type}/training/${now:%Y-%m-%d}_${now:%H-%M-%S}
+results_dir: /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2_norm/dataRoFormer/results/${task}/${exp_name}/label_frac=${label_frac}/${model_type}/training/${now:%Y-%m-%d}_${now:%H-%M-%S}
 
 
 training_args:
@@ -36,7 +36,7 @@ training_args:
         _partial_: True
         mode: "min"
         factor: 0.1
-        patience: 50
+        patience: 10 ##50
         verbose: True
       monitor: val/loss
 
@@ -45,7 +45,7 @@ training_args:
     #################################
     use_instance_loss: False
     
-    k_sample: 80
+    k_sample: 100
     bag_loss_weight: 0.7 # Disregarded if use_instance_loss: False
     subtyping: True
     instance_loss_fn:
@@ -66,8 +66,8 @@ training_args:
       _target_: pytorch_lightning.callbacks.ModelCheckpoint
       dirpath: ${results_dir}/checkpoints
       filename: "best"
-      monitor: "val_BinaryAccuracy"
-      mode: "max"
+      monitor: "val/loss" ##"val_BinaryAccuracy"
+      mode: "min"
       save_last: True
       auto_insert_metric_name: False
     ################
@@ -78,8 +78,8 @@ training_args:
 
     early_stopping:
       _target_: pytorch_lightning.callbacks.EarlyStopping
-      monitor: "val_BinaryAccuracy"
-      patience: 100
+      monitor: "val/loss"
+      patience: 40
       mode: "max"
       check_finite: True
 
@@ -99,7 +99,7 @@ training_args:
       _target_: romil.lightning_utils.MLFlowLoggerCheckpointer
       prefix: "" 
       experiment_name: ${exp_name}
-      tracking_uri: "http://10.120.1.200:5034" #/home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2_balanced_norm/dataRoFormer/data/mlflow
+      tracking_uri: "http://10.120.1.200:6084" #/home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2_norm/dataRoFormer/data/mlflow
       run_id: 
 
 

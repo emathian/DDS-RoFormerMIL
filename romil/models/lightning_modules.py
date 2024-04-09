@@ -473,13 +473,14 @@ class MILLitModule(LightningModule):
                 prog_bar=True,
                 sync_dist=True,
             )
+            # MUTE MLFLOW LOGGER
             if self.trainer.is_global_zero:
                 console_log.info(
                     (
                         "Fold %s | Epoch %s|"
                         f" {' | '.join([f'{key}: {value.item()}' for key, value in self.trainer.callback_metrics.items()])} "
                     ),
-                    ## MUTE MLFLOW LOGGER
+                    # MUTE MLFLOW LOGGER
                     re.findall(r"\d+", self.logger._prefix)[
                         -1
                     ],  # Find current validation fold using the logger prefix (extract the last number in the string)
