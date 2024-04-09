@@ -10,7 +10,8 @@ from omegaconf import DictConfig, OmegaConf
 
 from CLAM.datasets.dataset_generic import Generic_MIL_Dataset
 from romil.lightning_datamodule import MILDatamodule
-
+import sys
+sys.path.append("romil")
 log = logging.getLogger(__name__)
 
 
@@ -47,6 +48,11 @@ def train(
     model = hydra.utils.instantiate(args["training_args"]["lightning_module"],
                                     fold=fold, results_dir=results_dir)
 
+    
+    
+
+
+    
     callbacks = [
         hydra.utils.instantiate(callback_cfg)
         for _, callback_cfg in args["training_args"]["callbacks"].items()

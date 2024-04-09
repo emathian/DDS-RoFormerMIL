@@ -177,7 +177,7 @@ BTRoPEAMIL_s_pixel:
   positional_encoder: 
     _target_: romil.models.position_embedding_modules.RoFormerEncoder
     _recursive_: False
-    n_attention_block: 8
+    n_attention_block: 16
     n_embd: ${..hidden_dim}
     n_head: 16
     dropout: 0

@@ -6,7 +6,7 @@ hydra:
   run:
     dir: ${results_dir}
   sweep:
-    dir: /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2/dataRoFormer/results/${task}/${exp_name}/multirun  #data/results/${task}/${exp_name}/multirun ##
+    dir: /gpfsscratch/rech/ryr/ueu39kt/data_RoFormerMIL_CaA1CaA2/dataRoFormer/results/${task}/${exp_name}/multirun  #data/results/${task}/${exp_name}/multirun ##
     #dir: data/results/${task}/${exp_name}/multirun
     subdir: ${hydra.job.override_dirname}
 
@@ -17,8 +17,8 @@ hydra:
 # split_dir:  /home/mathiane/LNENWork/data_RoFormerMIL_TumorSegExp/dataRoFormer/splits 
 
 ## CaA1 vs CaA2
-features_dir: /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2/dataRoFormer/features 
-split_dir:  /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2/dataRoFormer/splits 
+features_dir: /gpfsscratch/rech/ryr/ueu39kt/data_RoFormerMIL_CaA1CaA2/dataRoFormer/features 
+split_dir:  /gpfsscratch/rech/ryr/ueu39kt/data_RoFormerMIL_CaA1CaA2/dataRoFormer/splits 
 
 seed: 1
 
@@ -82,7 +82,7 @@ task_3_tumor_carcinoids_segmentation:
 task_4_carcinoids_CaA1_CaA2:
   n_classes: 2
   MIL_Dataset:
-    _target_: datasets.dataset_generic.Generic_MIL_Dataset
+    _target_: CLAM.datasets.dataset_generic.Generic_MIL_Dataset
     csv_path: ${features_dir}/slides_format.csv
     data_dir: ${features_dir}
     shuffle: False

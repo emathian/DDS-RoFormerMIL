@@ -9,12 +9,14 @@ from lightning_fabric.utilities import rank_zero
 from omegaconf import DictConfig, OmegaConf
 
 from romil import train_utils
+import sys
+sys.path.append("romil")
 
 
 @hydra.main(
     version_base=None,
     config_path="../conf",
-    config_name= "training_carcinoids_CaA1CaA2",#"training_tcga_test"#,
+    config_name= "training_carcinoids_CaA1CaA2_JZ",#"training_tcga_test"#,
     #config_name= "training_tcga_test",
 
 )
