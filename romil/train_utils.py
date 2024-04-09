@@ -10,6 +10,8 @@ from omegaconf import DictConfig, OmegaConf
 
 from CLAM.datasets.dataset_generic import Generic_MIL_Dataset
 from romil.lightning_datamodule import MILDatamodule
+import sys
+sys.path.append("romil")
 from pytorch_lightning.loggers import WandbLogger
 from torch import nn
 log = logging.getLogger(__name__)

@@ -6,6 +6,7 @@ hydra:
   run:
     dir: ${results_dir}
   sweep:
+    dir: /gpfsscratch/rech/ryr/ueu39kt/data_RoFormerMIL_CaA1CaA2/dataRoFormer/results/${task}/${exp_name}/multirun  #data/results/${task}/${exp_name}/multirun ##
     dir: /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2_normdata_RoFormerMIL_CaA1CaA2_norm/dataRoFormer/results/${task}/${exp_name}/multirun  #data/results/${task}/${exp_name}/multirun ##
     #dir: data/results/${task}/${exp_name}/multirun
     subdir: ${hydra.job.override_dirname}
@@ -17,8 +18,8 @@ hydra:
 # split_dir:  /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2_norm/dataRoFormer/splits 
 
 ## CaA1 vs CaA2
-features_dir: /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2_norm/dataRoFormer/features 
-split_dir:  /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2_norm/dataRoFormer/splits 
+features_dir: /gpfsscratch/rech/ryr/ueu39kt/data_RoFormerMIL_CaA1CaA2_norm/dataRoFormer/features 
+split_dir:  /gpfsscratch/rech/ryr/ueu39kt/data_RoFormerMIL_CaA1CaA2_norm/dataRoFormer/splits 
 
 seed: 1
 
