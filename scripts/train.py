@@ -14,8 +14,7 @@ from romil import train_utils
 @hydra.main(
     version_base=None,
     config_path="../conf",
-    config_name= "task_4_carcinoids_CaA1_CaA2",#"training_tcga_test"#,
-    #config_name= "training_tcga_test",
+    config_name= "training_carcinoids_CaA1CaA2",
 
 )
 def main(training_config: DictConfig):

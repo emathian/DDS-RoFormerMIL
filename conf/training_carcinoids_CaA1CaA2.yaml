@@ -36,7 +36,7 @@ training_args:
         _partial_: True
         mode: "min"
         factor: 0.1
-        patience: 10 ##50
+        patience: 10 
         verbose: True
       monitor: val/loss
 
@@ -105,4 +105,4 @@ training_args:
 
 k_folds:
   k_start: 0
-  k_end: 15
+  k_end: 20

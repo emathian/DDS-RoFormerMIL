@@ -436,7 +436,7 @@ BTRoPEAMIL_pixel:
 #       bias: True
 
 
-BTRoPEAMIL_s_pixel: # redolent-goat-469  => Best model 
+BTRoPEAMIL_s_pixel: # redolent-goat-469  => Best model  ## & unbeat steed + Stylish mule
   _target_: romil.models.RoMIL.BTRoPEAMIL
   input_dim: 128
   hidden_dim: 64 # Not activate first linear layer
@@ -479,6 +479,38 @@ BTRoPEAMIL_s_pixel: # redolent-goat-469  => Best model
 #     n_attention_block: 2
 #     n_embd: ${..hidden_dim}
 #     n_head: 4
+#     dropout: 0.3
+#     rope: True
+#     rope_freqs: pixel
+#     resid_dropout: 0.3
+#   mil_head: 
+#     _target_: romil.models.ABMIL_heads.ABMIL_MB
+#     n_classes: ${${task}.n_classes}
+#     input_dim: ${..hidden_dim}
+#     hidden_dim: ${..hidden_dim}
+#     dropout: 0.3
+#     instance_classifiers: False
+#     attention_net:
+#       _target_: romil.models.attention.ClassAttention
+#       attn_scores: True # Warning if true compute inneficient attention to store the weights
+#       hidden_dim: ${..hidden_dim}
+#       attention_dim: 32
+#       dropout: ${..dropout}
+#       n_classes: ${${task}.n_classes}
+#       n_head: 4
+#       bias: True
+
+# BTRoPEAMIL_s_pixel: # Invible toad
+#   _target_: romil.models.RoMIL.BTRoPEAMIL
+#   input_dim: 128
+#   hidden_dim: 64 # Not activate first linear layer
+#   absolute_position_embeddings: False
+#   positional_encoder: 
+#     _target_: romil.models.position_embedding_modules.RoFormerEncoder
+#     _recursive_: False
+#     n_attention_block: 6
+#     n_embd: ${..hidden_dim}
+#     n_head: 8
 #     dropout: 0.3
 #     rope: True
 #     rope_freqs: pixel

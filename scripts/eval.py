@@ -14,12 +14,14 @@ log = logging.getLogger(__name__)
 
 @hydra.main(
     config_path="../conf",
-    config_name="eval_tumorseg",
+    config_name="eval_CaA1CaA2",
 )
 def main(eval_config: DictConfig) -> None:
     mlflow.set_tracking_uri(eval_config["tracking_uri"])
 
     results_dir = Path(eval_config["results_dir"])
+    print("*******************************************************")
+    print(results_dir)
     results_dir.mkdir(parents=True, exist_ok=True)
     (results_dir / "splits").mkdir()
     (results_dir / "checkpoints").mkdir()
@@ -37,11 +39,13 @@ def main(eval_config: DictConfig) -> None:
 
     for fold in folds:
         if not eval_config["load_model_from_mlflow"]:
-            ckpt = Path(eval_config["ckpt_path"]) / f"fold_{fold}" / "best.ckpt"
+            ckpt = Path(eval_config["ckpt_path"]) / f"fold_0" / "best.ckpt"
+            #ckpt = Path(eval_config["ckpt_path"]) / f"fold_{fold}" / "best.ckpt"
         else:
             ckpt = mlflow.artifacts.download_artifacts(
                 run_id=eval_config["mlflow"]["run_id"],
                 artifact_path=f"fold_{fold}/best.ckpt",
+                #dst_path=eval_config["mlflow"]["dst_path"]
             )
 
         shutil.copy(
