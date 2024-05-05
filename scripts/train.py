@@ -9,6 +9,8 @@ from lightning_fabric.utilities import rank_zero
 from omegaconf import DictConfig, OmegaConf
 from pytorch_lightning.loggers import WandbLogger
 from romil import train_utils
+import sys
+sys.path.append("romil")
 
 
 @hydra.main(

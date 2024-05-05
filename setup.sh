@@ -19,5 +19,7 @@ pip install -r requirements.txt
 
 pre-commit install
 
+module load pytorch-gpu/py3/2.0.0
+
 echo "PYTHONPATH=${PYTHONPATH}:${PWD}:${PWD}/CLAM" > .env
 export PYTHONPATH=${PYTHONPATH}:${PWD}:${PWD}/CLAM

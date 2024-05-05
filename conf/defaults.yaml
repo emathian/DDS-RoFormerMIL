@@ -17,8 +17,8 @@ hydra:
 # split_dir:  /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2_norm/dataRoFormer/splits 
 
 ## CaA1 vs CaA2
-features_dir: /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2_norm/dataRoFormer/features 
-split_dir:  /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2_norm/dataRoFormer/splits 
+features_dir: /gpfsscratch/rech/ryr/ueu39kt/data_RoFormerMIL_CaA1CaA2_norm/dataRoFormer/features 
+split_dir:  /gpfsscratch/rech/ryr/ueu39kt/data_RoFormerMIL_CaA1CaA2_norm/dataRoFormer/splits 
 
 seed: 1
 
