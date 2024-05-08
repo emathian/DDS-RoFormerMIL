@@ -9,7 +9,7 @@ import torch
 import torch.nn as nn
 from torch.nn import functional as F
 from xformers.ops import fmha
-
+import numpy as np
 from romil.models import rotary_embedding
 
 
@@ -208,8 +208,23 @@ class ClassAttention(nn.Module):
    
         # calculate query, key, values for all heads in batch and move head forward to be the batch dim
         keys = self.keys_projection(features)  # (1, T, attention_dim)
+        # if features.isnan().any() == True:
+        #         print("DEBUG: NAN features  ClassAttention")
+        #         print(features.isnan().any())
+        #         features_np = features.cpu().detach().numpy()
+        #         print( np.count_nonzero(np.isnan(features_np))/features_np.size)
+        
+        # if keys.isnan().any() == True:
+        #         print("DEBUG: NAN keys  ClassAttention")
+        #         print(keys.isnan().any())
+        #         keys_np = keys.cpu().detach().numpy()
+        #         print( np.count_nonzero(np.isnan(keys_np))/keys_np.size)
         values = self.values_projection(features)  # (1, T, attention_dim)
-
+        # if values.isnan().any() == True:
+        #         print("DEBUG: NAN keys  ClassAttention")
+        #         print(values.isnan().any())
+        #         values_np = values.cpu().detach().numpy()
+        #         print( np.count_nonzero(np.isnan(values_np))/values_np.size)
         k = keys.view(
             1, features.shape[1], self.n_head, self.attention_dim // self.n_head
         )  # (1, T, nh, hs)
@@ -258,7 +273,8 @@ class ClassAttention(nn.Module):
                 q, k, v, attn_bias=class_attn_bias
             ).view(len(attn_bias._batch_sizes), self.n_classes, self.attention_dim)
             
-    
+            ## Try solved Softmax NAN issue
+            out = out.clamp(min=1e-4)
             return self.output_projection(out), attn_weights
 
 

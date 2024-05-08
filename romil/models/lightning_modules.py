@@ -158,7 +158,7 @@ class MILLitModule(LightningModule):
         features, labels, coords, slide_id = batch
         # print("DEBUG slide_id :", slide_id )
         # print("DEBUG features :", len(features), features[0].shape )
-        # print("DEBUG labels :", len(features), labels[0].shape )
+        # print("DEBUG labels :", len(labels), labels[0].shape, labels )
         # print("DEBUG coords :", len(coords), coords[0].shape )
         assert not (
             isinstance(self.model, RoMIL.RoPEDSMIL) and len(features) > 1
@@ -473,12 +473,14 @@ class MILLitModule(LightningModule):
                 prog_bar=True,
                 sync_dist=True,
             )
+            # MUTE MLFLOW LOGGER
             if self.trainer.is_global_zero:
                 console_log.info(
                     (
                         "Fold %s | Epoch %s|"
                         f" {' | '.join([f'{key}: {value.item()}' for key, value in self.trainer.callback_metrics.items()])} "
                     ),
+                    # MUTE MLFLOW LOGGER
                     re.findall(r"\d+", self.logger._prefix)[
                         -1
                     ],  # Find current validation fold using the logger prefix (extract the last number in the string)

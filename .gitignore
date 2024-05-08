@@ -1,2 +1,8 @@
 /data
 /outputs
+romil/models/__pycache_/*
+romil/__pycache__/*
+CLAM/datasets/__pycache__/
+CLAM/datasets/__pycache__/*
+romil/__pycache__
+CLAM/datasets/__pycache__

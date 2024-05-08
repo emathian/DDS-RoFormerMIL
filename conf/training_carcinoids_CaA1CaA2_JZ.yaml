@@ -3,12 +3,12 @@ defaults:
   - model_dict@model_dict
   - _self_ 
 
-task: task_3_tumor_carcinoids_segmentation
+task: task_4_carcinoids_CaA1_CaA2
 exp_name: debug
 model_type: BTRoPEAMIL_s_pixel # Should be one of the models from confs/model_dict.yaml
 label_frac: 100 # % of training data to use during training 
 
-results_dir: /home/mathiane/LNENWork/data_RoFormerMIL_TumorSegExp/dataRoFormer/results/${task}/${exp_name}/label_frac=${label_frac}/${model_type}/training/${now:%Y-%m-%d}_${now:%H-%M-%S}
+results_dir: /gpfsscratch/rech/ryr/ueu39kt/data_RoFormerMIL_CaA1CaA2/dataRoFormer/results/${task}/${exp_name}/label_frac=${label_frac}/${model_type}/training/${now:%Y-%m-%d}_${now:%H-%M-%S}
 
 
 training_args:
@@ -26,7 +26,7 @@ training_args:
     optimizer:
       _target_: torch.optim.Adam
       _partial_: True
-      lr: 0.0005
+      lr: 0.005
       weight_decay: 0.0005
     ################
 
@@ -36,7 +36,7 @@ training_args:
         _partial_: True
         mode: "min"
         factor: 0.1
-        patience: 20
+        patience: 50
         verbose: True
       monitor: val/loss
 
@@ -53,7 +53,7 @@ training_args:
 
 
   datamodule_params:
-    batch_size: 8
+    batch_size: 1
     batch_size_test: 1
     num_workers: 4 
     shuffle: True
@@ -99,11 +99,10 @@ training_args:
       _target_: romil.lightning_utils.MLFlowLoggerCheckpointer
       prefix: "" 
       experiment_name: ${exp_name}
-      tracking_uri: /home/mathiane/LNENWork/data_RoFormerMIL_TumorSegExp/dataRoFormer/data/mlflow
+      tracking_uri: /gpfsscratch/rech/ryr/ueu39kt/data_RoFormerMIL_CaA1CaA2/dataRoFormer/data/mlflow
       run_id:
 
 
 k_folds:
   k_start: 0
   k_end: 15
-## Github test

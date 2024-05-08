@@ -6,7 +6,7 @@ from xformers.ops import fmha
 
 from romil.models import dsmil
 from romil.models.sine_embedding import SinePositionalEmbedding
-
+import numpy as np
 
 class RoPEAMIL(nn.Module):
     def __init__(
@@ -236,13 +236,18 @@ class BTRoPEAMIL(nn.Module):
         )  # (1, T, attention_dim) with T = sum(Nb)
         padded_features = padded_features.to(torch.float32)
 
+        
         attn_bias, padded_coords = fmha.BlockDiagonalMask.from_tensor_list(
             [coord.unsqueeze(0) for coord in coords]
         )  # (1, T, 2) with T = sum(Nb)
     
         padded_features = self.dim_reduction_projection(padded_features)
- 
-
+        # if padded_features.isnan().any() == True:
+        #     print("DEBUG: NAN padded_features  dim_reduction_projection (1st layer)")
+        #     print(padded_features.isnan().any())
+        #     padded_features_np = padded_features.cpu().detach().numpy()
+        #     print( np.count_nonzero(np.isnan(padded_features_np))/padded_features_np.size)
+        
         if self.absolute_position_embeddings is not None:
             padded_features = self.absolute_position_embeddings(
                 padded_features, padded_coords
@@ -251,7 +256,11 @@ class BTRoPEAMIL(nn.Module):
         encoded_features = self.positional_encoding(
             padded_features, padded_coords, attn_bias=attn_bias
         )
-
+        # if encoded_features.isnan().any() == True:
+        #     print("DEBUG: NAN encoded_features positionnal encoding")
+        #     print(encoded_features.isnan().any())
+        #     encoded_features_np = encoded_features.cpu().detach().numpy()
+        #     print( np.count_nonzero(np.isnan(encoded_features_np))/encoded_features_np.size)
         logits, attention_scores, updated_features = self.mil_head(
             encoded_features, attn_bias, test_process
         )

@@ -80,7 +80,7 @@ class ABMIL_MB(nn.Module):
 
         self.n_classes = n_classes
         self.input_projection = nn.Sequential(
-            *[nn.Linear(input_dim, hidden_dim), nn.ReLU(), nn.Dropout(dropout)]
+            *[nn.Linear(input_dim, hidden_dim), nn.LeakyReLU(), nn.Dropout(dropout)]
         )
         self.attention_net = attention_net
         # use an indepdent linear layer to predict each class
