@@ -20,6 +20,7 @@ sys.path.append("romil")
 
 )
 def main(training_config: DictConfig):
+
     train_utils.seed_torch(training_config["seed"])
 
     results_dir = Path(training_config["results_dir"])

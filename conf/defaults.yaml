@@ -105,3 +105,17 @@ task_5_carcinoids_TCAC:
     patient_strat: False
     ignore: []
     h5_folder: 'h5_files_grid'
+
+task_6_carcinoids_CaA1_CaA2_CaB:
+  n_classes: 3
+  MIL_Dataset:
+    _target_: CLAM.datasets.dataset_generic.Generic_MIL_Dataset #CLAM.datasets.dataset_generic.Generic_MIL_Dataset
+    csv_path: ${features_dir}/slides_format.csv
+    data_dir: ${features_dir}
+    shuffle: False
+    seed: ${seed}
+    print_info: True
+    label_dict: {"CaA1": 0, "CaA2": 1, "CaB": 2}
+    patient_strat: False
+    ignore: []
+    h5_folder: 'h5_files_grid'

@@ -77,6 +77,7 @@ class MILLitModule(LightningModule):
         # loss function
         self.criterion = loss
         metrics_params = {"task": "binary"}
+
         if model.n_classes > 2:
             metrics_params = {"task": "multiclass", "num_classes": model.n_classes}
 
@@ -156,10 +157,7 @@ class MILLitModule(LightningModule):
         coords (List[torch.Tensor]): List of features coordss (B elements of size Nb*2)
         """
         features, labels, coords, slide_id = batch
-        # print("DEBUG slide_id :", slide_id )
-        # print("DEBUG features :", len(features), features[0].shape )
-        # print("DEBUG labels :", len(labels), labels[0].shape, labels )
-        # print("DEBUG coords :", len(coords), coords[0].shape )
+
         assert not (
             isinstance(self.model, RoMIL.RoPEDSMIL) and len(features) > 1
         ), "DSMIL only implemented for batch size 1"
@@ -173,9 +171,7 @@ class MILLitModule(LightningModule):
             outputs["attention_scores"],
             outputs["updated_features"],
         )
-        # print("DEBUG logits :", logits.shape )
-        # print("DEBUG attention_scores :", attention_scores.shape )
-        # print("DEBUG updated_features :", updated_features.shape )
+
         probs = F.softmax(logits, dim=-1)
         preds = torch.argmax(probs, dim=-1)
 
@@ -461,8 +457,10 @@ class MILLitModule(LightningModule):
     def on_validation_epoch_end(
         self,
     ) -> None:
-        acc = self.val_metrics.compute()["val_BinaryAccuracy"]  # get current val acc
-
+        if self.model.n_classes  <=2:
+            acc = self.val_metrics.compute()["val_BinaryAccuracy"]  # get current val acc
+        else:
+            acc =  self.val_metrics.compute()["val_MulticlassAccuracy"]  
         if not self.trainer.sanity_checking:
             self.val_acc_best(acc)  # update best so far val acc
             # log `val_acc_best` as a value through `.compute()` method, instead of as a metric object
@@ -506,7 +504,10 @@ class MILLitModule(LightningModule):
     def log_cm(self, cm_metric, name):
         cm = cm_metric.compute().cpu().numpy().astype(int)
         cm_metric.reset()
-        cm_img = get_cm_image(cm, [0, 1])
+        if self.model.n_classes  <=2:
+            cm_img = get_cm_image(cm, [0, 1])
+        else:
+            cm_img = get_cm_image(cm, [0, 1, 2])
         self.logger.experiment.log_image(
             self.logger.run_id, cm_img, f"{self.logger._prefix}/{name}"
         )

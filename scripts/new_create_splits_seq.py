@@ -13,6 +13,7 @@ from sklearn.model_selection import KFold, StratifiedKFold, train_test_split
     config_name="create_splits",
 )
 def main(splits_config: DictConfig) -> None:
+
     slides_csv_path = splits_config["csv_path"]
     all_slides_df = pd.read_csv(slides_csv_path)
     shuffle = splits_config["shuffle"]
