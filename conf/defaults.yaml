@@ -6,14 +6,14 @@ hydra:
   run:
     dir: ${results_dir}
   sweep:
-    dir: /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2_norm/dataRoFormer/results/${task}/${exp_name}/multirun  #data/results/${task}/${exp_name}/multirun ##
+    dir: /gpfsscratch/rech/ryr/ueu39kt/data_RoFormerMIL_LNEN_LCNEC_training_CaA1CaA2_norm/dataRoFormer/results/${task}/${exp_name}/multirun  #data/results/${task}/${exp_name}/multirun ##
     subdir: ${hydra.job.override_dirname}
 
 #features_dir: ${hydra:runtime.cwd}/data/features 
 #split_dir: ${hydra:runtime.cwd}/data/splits
 ## Osiris
-features_dir: /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2_norm/dataRoFormer/features
-split_dir:  /home/mathiane/LNENWork/data_RoFormerMIL_CaA1CaA2_norm/dataRoFormer/splits 
+features_dir: /gpfsscratch/rech/ryr/ueu39kt/data_RoFormerMIL_LNEN_LCNEC_training_CaA1CaA2_norm/dataRoFormer/features
+split_dir:  /gpfsscratch/rech/ryr/ueu39kt/data_RoFormerMIL_LNEN_LCNEC_training_CaA1CaA2_norm/dataRoFormer/splits 
 
 ## JZ
 # features_dir: /gpfsscratch/rech/ryr/ueu39kt/data_RoFormerMIL_CaA1CaA2_norm/dataRoFormer/features 
