@@ -18,7 +18,8 @@ export PYTHONPATH=${PYTHONPATH}:${ROOTDIR}:${ROOTDIR}/CLAM
 
 python /linkhome/rech/genkmw01/ueu39kt/DDS-RoFormerMIL/scripts/train.py  --config-name training_LNEN_LCNEC_CaA1_CaA2_JZ \
                     features_dir=/gpfsscratch/rech/ryr/ueu39kt/data_RoFormerMIL_LNEN_LCNEC_training_CaA1CaA2_norm/dataRoFormer/features \
-                    split_dir=/gpfsscratch/rech/ryr/ueu39kt/data_RoFormerMIL_LNEN_LCNEC_training_CaA1CaA2_norm/dataRoFormer/split model_dict.BTRoPEAMIL_s_pixel.positional_encoder.dropout=0.35 \
+                    split_dir=/gpfsscratch/rech/ryr/ueu39kt/data_RoFormerMIL_LNEN_LCNEC_training_CaA1CaA2_norm/dataRoFormer/split \
+                    model_dict.BTRoPEAMIL_s_pixel.positional_encoder.dropout=0.35 \
                     model_dict.BTRoPEAMIL_s_pixel.positional_encoder.resid_dropout=0.35 \
                     model_dict.BTRoPEAMIL_s_pixel.mil_head.dropout=0.35 \
                     training_args.lightning_module.optimizer.weight_decay=0.001 

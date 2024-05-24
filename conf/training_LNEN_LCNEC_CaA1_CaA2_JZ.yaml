@@ -4,7 +4,7 @@ defaults:
   - _self_ 
 
 task: task_4_carcinoids_CaA1_CaA2
-exp_name: CaA1Ca2_LNEN_LCNEC_norm  #debug
+exp_name: CaA1Ca2_LNEN_norm_M5_gdc_v2  #debug
 model_type: BTRoPEAMIL_s_pixel # Should be one of the models from confs/model_dict.yaml
 label_frac: 100 # % of training data to use during training 
 
@@ -90,6 +90,8 @@ training_args:
     accelerator: gpu
     strategy: ddp
     precision: '16-mixed'
+    gradient_clip_val: 5
+    gradient_clip_algorithm: value
     # For some reason ddp + sanity_val_steps breaks lightning
     # Change to >0 when working on single gpu
     num_sanity_val_steps: 0

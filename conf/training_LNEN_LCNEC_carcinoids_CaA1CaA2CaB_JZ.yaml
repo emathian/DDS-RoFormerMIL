@@ -3,12 +3,12 @@ defaults:
   - model_dict@model_dict
   - _self_ 
 
-task: task_4_carcinoids_CaA1_CaA2
-exp_name: debug
+task: task_6_carcinoids_CaA1_CaA2_CaB
+exp_name: CaA1Ca2CaB_LNEN_norm_V3  #debug
 model_type: BTRoPEAMIL_s_pixel # Should be one of the models from confs/model_dict.yaml
 label_frac: 100 # % of training data to use during training 
 
-results_dir: /gpfsscratch/rech/ryr/ueu39kt/data_RoFormerMIL_CaA1CaA2/dataRoFormer/results/${task}/${exp_name}/label_frac=${label_frac}/${model_type}/training/${now:%Y-%m-%d}_${now:%H-%M-%S}
+results_dir: /gpfsscratch/rech/ryr/ueu39kt/data_RoFormerMIL_LNEN_LCNEC_training_CaA1CaA2CaB_norm/dataRoFormer/results/${task}/${exp_name}/label_frac=${label_frac}/${model_type}/training/${now:%Y-%m-%d}_${now:%H-%M-%S}
 
 
 training_args:
@@ -26,7 +26,7 @@ training_args:
     optimizer:
       _target_: torch.optim.Adam
       _partial_: True
-      lr: 0.005
+      lr: 0.0005
       weight_decay: 0.0005
     ################
 
@@ -36,7 +36,7 @@ training_args:
         _partial_: True
         mode: "min"
         factor: 0.1
-        patience: 50
+        patience: 10 
         verbose: True
       monitor: val/loss
 
@@ -45,7 +45,7 @@ training_args:
     #################################
     use_instance_loss: False
     
-    k_sample: 40
+    k_sample: 100
     bag_loss_weight: 0.7 # Disregarded if use_instance_loss: False
     subtyping: True
     instance_loss_fn:
@@ -53,7 +53,7 @@ training_args:
 
 
   datamodule_params:
-    batch_size: 1
+    batch_size: 8
     batch_size_test: 1
     num_workers: 4 
     shuffle: True
@@ -66,7 +66,7 @@ training_args:
       _target_: pytorch_lightning.callbacks.ModelCheckpoint
       dirpath: ${results_dir}/checkpoints
       filename: "best"
-      monitor: "val_BinaryAccuracy"
+      monitor: "val/loss" ##"val_BinaryAccuracy"
       mode: "min"
       save_last: True
       auto_insert_metric_name: False
@@ -78,15 +78,15 @@ training_args:
 
     early_stopping:
       _target_: pytorch_lightning.callbacks.EarlyStopping
-      monitor: "val_BinaryAccuracy"
-      patience: 20
-      mode: "max"
+      monitor: "val/loss"
+      patience: 30
+      mode: "min"
       check_finite: True
 
   trainer: 
     _target_: pytorch_lightning.Trainer
     default_root_dir: ${results_dir}
-    max_epochs: 50
+    max_epochs: 40 
     accelerator: gpu
     strategy: ddp
     precision: '16-mixed'
@@ -99,10 +99,10 @@ training_args:
       _target_: romil.lightning_utils.MLFlowLoggerCheckpointer
       prefix: "" 
       experiment_name: ${exp_name}
-      tracking_uri: /gpfsscratch/rech/ryr/ueu39kt/data_RoFormerMIL_CaA1CaA2/dataRoFormer/data/mlflow
-      run_id:
+      tracking_uri: /gpfsscratch/rech/ryr/ueu39kt/data_RoFormerMIL_LNEN_LCNEC_training_CaA1CaA2CaB_norm/mlflow/mlruns
+      run_id: 
 
 
 k_folds:
   k_start: 0
-  k_end: 15
+  k_end: 28

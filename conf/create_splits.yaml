@@ -4,7 +4,7 @@ defaults:
   
 
 results_dir: ${split_dir}
-task: task_6_carcinoids_CaA1_CaA2_CaB #task_2_tumor_subtyping
+task: task_7_carcinoids_CaA1_CaA2_LCNEC #task_2_tumor_subtyping
 
 k_folds: 28
 # no more test frac, now depends on the k_folds
