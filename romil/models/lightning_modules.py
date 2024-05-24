@@ -20,6 +20,8 @@ from torchmetrics import (
     MetricCollection,
     Precision,
     Recall,
+    F1Score,
+
 )
 
 from CLAM.utils import instance_eval_utils
@@ -90,6 +92,7 @@ class MILLitModule(LightningModule):
                 Precision(**metrics_params),
                 AUROC(**metrics_params),
                 AveragePrecision(**metrics_params),
+                F1Score(**metrics_params, average='weighted')
             ]
         )
 
@@ -270,6 +273,7 @@ class MILLitModule(LightningModule):
         return {"loss": loss, "preds": preds, "targets": targets}
 
     def validation_step(self, batch: Any, _: int) -> Dict[str, Any]:     
+        self.model.eval()
         loss, instance_loss, preds, targets, probas = self.step(batch)
         ## Activation of attn scores 
         # if self.current_epoch == 10:
@@ -279,7 +283,7 @@ class MILLitModule(LightningModule):
         #     self.val_export_all_res(preds, targets, probas, attention_scores, coords, slide_id)
         #     self.test_off()   
         self.val_log(loss, instance_loss, preds, targets, probas)
-        
+        self.model.train()
         return {"loss": loss, "preds": preds, "targets": targets}
 
     def val_export_all_res(
@@ -368,6 +372,7 @@ class MILLitModule(LightningModule):
 
     def test_step(self, batch: Any, _: int) -> Dict[str, Any]:
         self.test_on()
+        self.model.eval()
         loss, instance_loss, preds, targets, probas, attention_scores, coords, slide_id = self.step(batch)
         self.test_log(loss, instance_loss, preds, targets, probas)
         attention_scores = einops.rearrange(torch.squeeze(attention_scores), "c n h -> n c h")
@@ -389,6 +394,7 @@ class MILLitModule(LightningModule):
         df_predictions.to_parquet(output_pred_dir, 
                                    partition_cols=["fold", "split"],
                                    )
+        self.model.train()
         return {"loss": loss, "preds": preds, "targets": targets}
 
     def test_on(self) -> None :

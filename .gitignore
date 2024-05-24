@@ -5,4 +5,6 @@ romil/__pycache__/*
 CLAM/datasets/__pycache__/
 CLAM/datasets/__pycache__/*
 romil/__pycache__
-CLAM/datasets/__pycache__
+CLAM/datasets/__pycache_
+CLAM/utils/__pycache___
+CLAM/utils/__pycache__/*

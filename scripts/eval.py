@@ -39,7 +39,7 @@ def main(eval_config: DictConfig) -> None:
 
     for fold in folds:
         if not eval_config["load_model_from_mlflow"]:
-            ckpt = Path(eval_config["ckpt_path"]) / f"fold_0" / "best.ckpt"
+            ckpt = Path(eval_config["ckpt_path"]) / f"fold_1" / "best.ckpt"
             #ckpt = Path(eval_config["ckpt_path"]) / f"fold_{fold}" / "best.ckpt"
         else:
             ckpt = mlflow.artifacts.download_artifacts(

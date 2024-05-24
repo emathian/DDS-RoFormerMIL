@@ -10,6 +10,7 @@ from omegaconf import DictConfig, OmegaConf
 from pytorch_lightning.loggers import WandbLogger
 from romil import train_utils
 import sys
+import random
 sys.path.append("romil")
 
 
@@ -20,10 +21,12 @@ sys.path.append("romil")
 
 )
 def main(training_config: DictConfig):
-
-    train_utils.seed_torch(training_config["seed"])
-
+    #train_utils.seed_torch(training_config["seed"])
+    results_dir = training_config["results_dir"] + "_" + str(random.randint(0, 99))
+    training_config["results_dir"] = results_dir   
+    print("training_config[results_dir]", training_config["results_dir"])
     results_dir = Path(training_config["results_dir"])
+
     results_dir.mkdir(parents=True, exist_ok=True)
     (results_dir / "splits").mkdir(exist_ok=True)
     (results_dir / "attention_scores").mkdir(exist_ok=True)

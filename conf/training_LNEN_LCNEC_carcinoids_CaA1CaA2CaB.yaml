@@ -4,7 +4,7 @@ defaults:
   - _self_ 
 
 task: task_6_carcinoids_CaA1_CaA2_CaB
-exp_name: CaA1Ca2CaB_LNEN_LCNEC_norm  #debug
+exp_name: CaA1Ca2CaB_LNEN_norm_M8  #debug
 model_type: BTRoPEAMIL_s_pixel # Should be one of the models from confs/model_dict.yaml
 label_frac: 100 # % of training data to use during training 
 

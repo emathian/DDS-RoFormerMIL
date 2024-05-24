@@ -12,8 +12,8 @@ hydra:
 #features_dir: ${hydra:runtime.cwd}/data/features 
 #split_dir: ${hydra:runtime.cwd}/data/splits
 ## Osiris
-features_dir: /gpfsscratch/rech/ryr/ueu39kt/data_RoFormerMIL_LNEN_LCNEC_training_CaA1CaA2_norm/dataRoFormer/features
-split_dir:  /gpfsscratch/rech/ryr/ueu39kt/data_RoFormerMIL_LNEN_LCNEC_training_CaA1CaA2_norm/dataRoFormer/splits 
+features_dir: /gpfsscratch/rech/ryr/ueu39kt/data_RoFormerMIL_LNEN_LCNEC_training_CaA1CaA2LCNEC_norm/dataRoFormer/features
+split_dir:  /gpfsscratch/rech/ryr/ueu39kt/data_RoFormerMIL_LNEN_LCNEC_training_CaA1CaA2LCNEC_norm/dataRoFormer/splits 
 
 ## JZ
 # features_dir: /gpfsscratch/rech/ryr/ueu39kt/data_RoFormerMIL_CaA1CaA2_norm/dataRoFormer/features 
@@ -116,6 +116,21 @@ task_6_carcinoids_CaA1_CaA2_CaB:
     seed: ${seed}
     print_info: True
     label_dict: {"CaA1": 0, "CaA2": 1, "CaB": 2}
+    patient_strat: False
+    ignore: []
+    h5_folder: 'h5_files_grid'
+
+
+task_7_carcinoids_CaA1_CaA2_LCNEC:
+  n_classes: 3
+  MIL_Dataset:
+    _target_: CLAM.datasets.dataset_generic.Generic_MIL_Dataset #CLAM.datasets.dataset_generic.Generic_MIL_Dataset
+    csv_path: ${features_dir}/slides_format.csv
+    data_dir: ${features_dir}
+    shuffle: False
+    seed: ${seed}
+    print_info: True
+    label_dict: {"CaA1": 0, "CaA2": 1, "LCNEC": 2}
     patient_strat: False
     ignore: []
     h5_folder: 'h5_files_grid'

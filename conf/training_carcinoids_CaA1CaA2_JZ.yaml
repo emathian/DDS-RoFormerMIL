@@ -67,7 +67,7 @@ training_args:
       dirpath: ${results_dir}/checkpoints
       filename: "best"
       monitor: "val_BinaryAccuracy"
-      mode: "max"
+      mode: "min"
       save_last: True
       auto_insert_metric_name: False
     ################

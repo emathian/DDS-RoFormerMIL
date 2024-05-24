@@ -90,6 +90,8 @@ training_args:
     accelerator: gpu
     strategy: ddp
     precision: '16-mixed'
+    #gradient_clip_val: 1
+    #gradient_clip_algorithm: norm
     # For some reason ddp + sanity_val_steps breaks lightning
     # Change to >0 when working on single gpu
     num_sanity_val_steps: 0

@@ -76,7 +76,7 @@ def train(
         #detect_anomaly=True
         )
     
-    # wandb_logger.watch(model, log_freq=100)
+    #wandb_logger.watch(model, log_freq=20)
     # art = wandb.Artifact('model-test-debug', type='model')
     # wandb.log_artifact(art)
     
