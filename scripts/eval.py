@@ -36,11 +36,15 @@ def main(eval_config: DictConfig) -> None:
     folds = np.arange(
         eval_config["k_folds"]["k_start"], eval_config["k_folds"]["k_end"]
     )
-
+    
     for fold in folds:
         if not eval_config["load_model_from_mlflow"]:
-            ckpt = Path(eval_config["ckpt_path"]) / f"fold_1" / "best.ckpt"
-            #ckpt = Path(eval_config["ckpt_path"]) / f"fold_{fold}" / "best.ckpt"
+            ckpt = Path(eval_config["ckpt_path"]) / f"fold_{eval_config['fold_for_inf']}" / "best.ckpt"
+            print("*******************************************************")
+
+            print("ckpt ", ckpt)
+            print("*******************************************************")
+
         else:
             ckpt = mlflow.artifacts.download_artifacts(
                 run_id=eval_config["mlflow"]["run_id"],

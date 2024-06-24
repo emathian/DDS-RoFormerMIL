@@ -18,7 +18,7 @@ load_model_from_mlflow: False
 
 ckpt_path: "/gpfsscratch/rech/ryr/ueu39kt/data_RoFormerMIL_LNEN_LCNEC_training_CaA1CaA2CaB_norm/dataRoFormer/results/task_6_carcinoids_CaA1_CaA2_CaB/CaA1Ca2CaB_LNEN_norm_V3/label_frac=100/BTRoPEAMIL_s_pixel/training/2024-05-13_09-38-14_95/checkpoints"
 mlflow:
-  run_id: "/gpfsscratch/rech/ryr/ueu39kt/data_RoFormerMIL_LNEN_LCNEC_training_CaA1CaA2CaB_norm/mlflow/mlruns/146460649735492552/a29a5c9add7247009041e80b3fe91625/artifacts/fold_4/best.ckpt" #e667c13579f64986ae5c2a9501b1a79d
+  run_id: "/gpfsscratch/rech/ryr/ueu39kt/data_RoFormerMIL_LNEN_LCNEC_training_CaA1CaA2CaB_norm/mlflow/mlruns/146460649735492552/ff7ec424aaa34215b039f3164513f56f/artifacts/fold_4/best.ckpt" #e667c13579f64986ae5c2a9501b1a79d
 
 lightning_module:
   _target_: romil.models.lightning_modules.MILLitModule
@@ -36,8 +36,8 @@ lightning_module:
   bag_loss_weight: 0.7
   
 k_folds:
-  k_start: 28
-  k_end: 29
+  k_start: 33
+  k_end: 34
 
 
 multiclass_avg: "weighted"
